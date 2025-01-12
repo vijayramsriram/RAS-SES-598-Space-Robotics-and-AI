@@ -1,0 +1,224 @@
+% Lecture 1: Course Introduction & State Estimation Overview
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{whale}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{tikz}
+
+% Define argmin/argmax operators
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+% Title Page Info
+\title{SES/RAS 598: Space Robotics and AI}
+\subtitle{Lecture 1: Course Introduction \& State Estimation Overview}
+\author{Dr. Jnaneshwar Das}
+\institute{Arizona State University \\ School of Earth and Space Exploration}
+\date{Spring 2025}
+
+\begin{document}
+
+% Title slide
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Outline
+\begin{frame}{Lecture Outline}
+    \tableofcontents
+\end{frame}
+
+\section{Course Overview}
+
+\begin{frame}{Course Structure}
+    \begin{itemize}
+        \item<1-> \textbf{Meeting Times:} Tu/Th 10:30-11:45am
+        \item<2-> \textbf{Location:} PSF 647
+        \item<3-> \textbf{Course Components:}
+            \begin{itemize}
+                \item Assignments (20\%)
+                \item Midterm Project (20\%)
+                \item Final Project (50\%)
+                \item Class Participation (10\%)
+            \end{itemize}
+        \item<4-> \textbf{Prerequisites:}
+            \begin{itemize}
+                \item Linear algebra, calculus, probability theory
+                \item Python programming with NumPy, SciPy
+                \item Basic computer vision concepts
+                \item Linux/Unix systems experience
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Course Resources}
+    \begin{itemize}
+        \item<1-> \textbf{Recommended Books:}
+            \begin{itemize}
+                \item Probabilistic Robotics (Thrun, Burgard, Fox)
+                \item Optimal State Estimation (Simon)
+                \item Pattern Recognition and Machine Learning (Bishop)
+            \end{itemize}
+        \item<2-> \textbf{Interactive Tutorials:}
+            \begin{itemize}
+                \item Sensor Fusion
+                \item Parameter Estimation
+                \item Gaussian Processes
+            \end{itemize}
+        \item<3-> \textbf{Required Software:}
+            \begin{itemize}
+                \item Linux OS
+                \item ROS2
+                \item Python with scientific computing libraries
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\section{State Estimation Fundamentals}
+
+\begin{frame}{Why State Estimation?}
+    \begin{itemize}
+        \item<1-> \textbf{Real-World Applications:}
+            \begin{itemize}
+                \item Mars rover navigation
+                \item Drone flight control
+                \item Satellite attitude determination
+            \end{itemize}
+        \item<2-> \textbf{Key Challenges:}
+            \begin{itemize}
+                \item Sensor noise and uncertainty
+                \item Environmental dynamics
+                \item Resource constraints
+            \end{itemize}
+        \item<3-> \textbf{Impact on Space Exploration:}
+            \begin{itemize}
+                \item Autonomous navigation
+                \item Precision landing
+                \item Sample collection
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Least Squares Estimation}
+    \begin{itemize}
+        \item<1-> \textbf{Mathematical Foundation:}
+            \[ \hat{\theta} = \argmin_{\theta} \sum_{i=1}^n (y_i - h(\theta))^2 \]
+        \item<2-> \textbf{Key Properties:}
+            \begin{itemize}
+                \item Minimizes squared error
+                \item Optimal for Gaussian noise
+                \item Computationally efficient
+            \end{itemize}
+        \item<3-> \textbf{Applications:}
+            \begin{itemize}
+                \item Sensor calibration
+                \item Trajectory estimation
+                \item Parameter identification
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Maximum Likelihood Estimation}
+    \begin{itemize}
+        \item<1-> \textbf{Principle:}
+            \[ \hat{\theta}_{\text{MLE}} = \argmax_{\theta} \prod_{i=1}^n p(y_i|\theta) \]
+        \item<2-> \textbf{Connection to Least Squares:}
+            \begin{itemize}
+                \item Equivalent under Gaussian assumptions
+                \item More general framework
+                \item Handles different noise models
+            \end{itemize}
+        \item<3-> \textbf{Space Applications:}
+            \begin{itemize}
+                \item Orbit determination
+                \item Attitude estimation
+                \item Sensor fusion
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\section{Linear Dynamical Systems}
+
+\begin{frame}{State-Space Models}
+    \begin{itemize}
+        \item<1-> \textbf{System Dynamics:}
+            \begin{align*}
+                x_{k+1} &= Ax_k + Bu_k + w_k \\
+                y_k &= Cx_k + v_k
+            \end{align*}
+        \item<2-> \textbf{Components:}
+            \begin{itemize}
+                \item State vector $x_k$
+                \item Input vector $u_k$
+                \item Measurement vector $y_k$
+                \item Process noise $w_k$
+                \item Measurement noise $v_k$
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Case Study: Mars Rover Navigation}
+    \begin{itemize}
+        \item<1-> \textbf{State Variables:}
+            \begin{itemize}
+                \item Position (x, y, z)
+                \item Orientation (roll, pitch, yaw)
+                \item Velocities
+            \end{itemize}
+        \item<2-> \textbf{Sensors:}
+            \begin{itemize}
+                \item Visual odometry
+                \item Inertial measurement unit (IMU)
+                \item Sun sensors
+            \end{itemize}
+        \item<3-> \textbf{Challenges:}
+            \begin{itemize}
+                \item Wheel slippage
+                \item Varying terrain
+                \item Limited computational resources
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\section{Next Steps}
+
+\begin{frame}{Preparation for Next Lecture}
+    \begin{itemize}
+        \item<1-> \textbf{Review:}
+            \begin{itemize}
+                \item Matrix operations
+                \item Probability concepts
+                \item Basic Python programming
+            \end{itemize}
+        \item<2-> \textbf{Setup:}
+            \begin{itemize}
+                \item Install Linux if needed
+                \item Configure ROS2 environment
+                \item Test Python scientific libraries
+            \end{itemize}
+        \item<3-> \textbf{Reading:}
+            \begin{itemize}
+                \item Skim Kalman filter basics
+                \item Review assigned papers
+                \item Explore interactive tutorials
+            \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Questions?}
+    \begin{center}
+        \Huge Thank you!
+        
+        \vspace{1cm}
+        \normalsize
+        Contact: jdas5@asu.edu
+    \end{center}
+\end{frame}
+
+\end{document} 
