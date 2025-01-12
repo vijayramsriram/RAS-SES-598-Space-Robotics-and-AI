@@ -8,8 +8,41 @@
 \usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{xcolor}
 \usepackage{listings}
-\usepackage{tikz}
+
+% Define colors for syntax highlighting
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Configure Python style
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\tiny,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{codepurple},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numberstyle=\tiny\color{codegray},
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single,
+    morekeywords={self,def,class,return,import,from,as,with},
+    emphstyle={\color{blue}},
+    emph={numpy,scipy,np,minimize,norm,multivariate_normal}
+}
+
+\lstset{style=pythonstyle}
 
 % Define argmin/argmax operators
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -124,6 +157,29 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Implementation Example: Least Squares Estimation}
+\begin{lstlisting}[language=Python]
+import numpy as np
+from scipy.optimize import minimize
+
+class LeastSquaresEstimator:
+    def __init__(self, measurements, measurement_model):
+        self.y = measurements        # Measurement vector
+        self.h = measurement_model   # Measurement model function
+        
+    def cost_function(self, theta):
+        """Compute sum of squared errors."""
+        residuals = self.y - self.h(theta)
+        return np.sum(residuals**2)
+    
+    def estimate(self, theta_init):
+        """Find parameters that minimize squared error."""
+        result = minimize(self.cost_function, theta_init, 
+                        method='Nelder-Mead')
+        return result.x  # Return optimal parameters
+\end{lstlisting}
+\end{frame}
+
 \begin{frame}{Maximum Likelihood Estimation}
     \begin{itemize}
         \item<1-> \textbf{Principle:}
@@ -141,6 +197,30 @@
                 \item Sensor fusion
             \end{itemize}
     \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Implementation Example: Maximum Likelihood Estimation}
+\begin{lstlisting}[language=Python]
+import numpy as np
+from scipy.stats import norm
+from scipy.optimize import minimize
+
+class MLEstimator:
+    def __init__(self, measurements, measurement_model):
+        self.y = measurements        # Measurement vector
+        self.h = measurement_model   # Measurement model function
+        
+    def neg_log_likelihood(self, theta):
+        """Compute negative log-likelihood."""
+        residuals = self.y - self.h(theta)  # Assuming Gaussian noise model
+        return -np.sum(norm.logpdf(residuals))
+    
+    def estimate(self, theta_init):
+        """Find parameters that maximize likelihood."""
+        result = minimize(self.neg_log_likelihood, theta_init, 
+                        method='Nelder-Mead')
+        return result.x  # Return optimal parameters
+\end{lstlisting}
 \end{frame}
 
 \section{Linear Dynamical Systems}
@@ -184,6 +264,33 @@
                 \item Limited computational resources
             \end{itemize}
     \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Implementation Example: State-Space Model}
+\begin{lstlisting}[language=Python]
+import numpy as np
+from scipy.stats import multivariate_normal
+
+class LinearStateSpaceModel:
+    def __init__(self, A, B, C, Q, R):
+        self.A = A  # State transition matrix
+        self.B = B  # Input matrix
+        self.C = C  # Measurement matrix
+        self.Q = Q  # Process noise covariance
+        self.R = R  # Measurement noise covariance
+        
+    def propagate_state(self, x, u=None):
+        """Propagate state forward one step."""
+        w = multivariate_normal.rvs(mean=np.zeros(x.shape), cov=self.Q)
+        if u is not None:
+            return self.A @ x + self.B @ u + w
+        return self.A @ x + w
+    
+    def get_measurement(self, x):
+        """Get noisy measurement of current state."""
+        v = multivariate_normal.rvs(mean=np.zeros(self.C.shape[0]), cov=self.R)
+        return self.C @ x + v
+\end{lstlisting}
 \end{frame}
 
 \section{Next Steps}

@@ -8,9 +8,43 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage{listings}
+\usepackage{xcolor}
 \usepackage{tikz}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+
+% Define colors for syntax highlighting
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Configure Python style
+\lstdefinestyle{pythonstyle}{
+    language=Python,
+    basicstyle=\ttfamily\tiny,
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{blue}\bfseries,
+    stringstyle=\color{codepurple},
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numberstyle=\tiny\color{codegray},
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single,
+    morekeywords={self,def,class,return,import,from,as,with},
+    emphstyle={\color{blue}},
+    emph={numpy,scipy,np,random,multivariate_normal}
+}
+
+\lstset{style=pythonstyle}
 
 % Title Page Info
 \title{SES/RAS 598: Space Robotics and AI}
@@ -72,28 +106,35 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Implementation in Python}
-    \begin{lstlisting}[language=Python]
+\begin{frame}[fragile]{Implementation Example: Kalman Filter}
+\begin{lstlisting}[language=Python]
+import numpy as np
+
 class KalmanFilter:
-    def __init__(self, F, B, H, Q, R):
-        self.F = F  # State transition matrix
-        self.B = B  # Control input matrix
-        self.H = H  # Measurement matrix
+    def __init__(self, A, B, C, Q, R):
+        self.A = A  # State transition matrix
+        self.B = B  # Input matrix
+        self.C = C  # Measurement matrix
         self.Q = Q  # Process noise covariance
         self.R = R  # Measurement noise covariance
         
-    def predict(self, x, P, u):
-        x_pred = self.F @ x + self.B @ u
-        P_pred = self.F @ P @ self.F.T + self.Q
+    def predict(self, x, P, u=None):
+        """Predict next state and covariance."""
+        if u is not None:
+            x_pred = self.A @ x + self.B @ u
+        else:
+            x_pred = self.A @ x
+        P_pred = self.A @ P @ self.A.T + self.Q
         return x_pred, P_pred
-        
-    def update(self, x_pred, P_pred, z):
-        K = P_pred @ self.H.T @ np.linalg.inv(
-            self.H @ P_pred @ self.H.T + self.R)
-        x = x_pred + K @ (z - self.H @ x_pred)
-        P = (np.eye(len(x)) - K @ self.H) @ P_pred
+    
+    def update(self, x_pred, P_pred, y):
+        """Update state estimate using measurement."""
+        K = P_pred @ self.C.T @ np.linalg.inv(
+            self.C @ P_pred @ self.C.T + self.R)
+        x = x_pred + K @ (y - self.C @ x_pred)
+        P = (np.eye(len(x)) - K @ self.C) @ P_pred
         return x, P
-    \end{lstlisting}
+\end{lstlisting}
 \end{frame}
 
 \section{Particle Filters}
@@ -138,30 +179,54 @@ class KalmanFilter:
     \end{algorithm}
 \end{frame}
 
-\begin{frame}{Implementation Example}
-    \begin{lstlisting}[language=Python]
+\begin{frame}[fragile]{Implementation Example: Particle Filter}
+\begin{lstlisting}[language=Python]
+import numpy as np
+from scipy.stats import multivariate_normal
+
 class ParticleFilter:
-    def __init__(self, n_particles):
-        self.particles = np.zeros((n_particles, state_dim))
-        self.weights = np.ones(n_particles) / n_particles
+    def __init__(self, n_particles, motion_model, measurement_model):
+        self.n_particles = n_particles
+        self.motion_model = motion_model
+        self.measurement_model = measurement_model
+        self.particles = None
+        self.weights = None
         
-    def predict(self, u):
-        # Propagate particles through motion model
-        for i in range(len(self.particles)):
-            self.particles[i] = motion_model(
+    def initialize(self, initial_state, initial_cov):
+        """Initialize particles from Gaussian distribution."""
+        self.particles = multivariate_normal.rvs(
+            mean=initial_state,
+            cov=initial_cov,
+            size=self.n_particles
+        )
+        self.weights = np.ones(self.n_particles) / self.n_particles
+        
+    def predict(self, u=None):
+        """Propagate particles through motion model."""
+        for i in range(self.n_particles):
+            self.particles[i] = self.motion_model(
                 self.particles[i], u)
             
-    def update(self, z):
-        # Update weights based on measurement
-        for i in range(len(self.particles)):
-            self.weights[i] *= measurement_model(
-                self.particles[i], z)
+    def update(self, measurement):
+        """Update particle weights using measurement."""
+        for i in range(self.n_particles):
+            likelihood = self.measurement_model(
+                measurement, self.particles[i])
+            self.weights[i] *= likelihood
         self.weights /= np.sum(self.weights)
         
-        # Resample if needed
-        if self.neff() < self.n_threshold:
-            self.resample()
-    \end{lstlisting}
+    def resample(self):
+        """Resample particles if effective sample size is low."""
+        n_eff = 1.0 / np.sum(self.weights**2)
+        if n_eff < self.n_particles / 2:
+            indices = np.random.choice(
+                self.n_particles,
+                size=self.n_particles,
+                p=self.weights
+            )
+            self.particles = self.particles[indices]
+            self.weights = np.ones(self.n_particles) / self.n_particles
+\end{lstlisting}
 \end{frame}
 
 \section{Assignment 1: 2D State Estimation}
@@ -189,8 +254,9 @@ class ParticleFilter:
     \end{itemize}
 \end{frame}
 
-\begin{frame}{ROS2 Environment Setup}
-    \begin{lstlisting}[language=bash]
+\begin{frame}[fragile]
+\frametitle{ROS2 Environment Setup}
+\begin{lstlisting}[language=bash]
 # Create ROS2 workspace
 mkdir -p ~/ros2_ws/src
 cd ~/ros2_ws/src
@@ -205,11 +271,12 @@ colcon build
 
 # Source workspace
 source install/setup.bash
-    \end{lstlisting}
+\end{lstlisting}
 \end{frame}
 
-\begin{frame}{Basic ROS2 Node Structure}
-    \begin{lstlisting}[language=Python]
+\begin{frame}[fragile]
+\frametitle{Basic ROS2 Node Structure}
+\begin{lstlisting}
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import PoseStamped
@@ -231,7 +298,7 @@ class StateEstimator(Node):
     def odom_callback(self, msg):
         # Implement state estimation here
         pass
-    \end{lstlisting}
+\end{lstlisting}
 \end{frame}
 
 \section{Next Steps}
