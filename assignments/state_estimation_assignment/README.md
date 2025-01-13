@@ -122,5 +122,3 @@ Submit your completed implementation along with a report that includes:
 ## Resources
 
 - ROS2 Documentation: https://docs.ros.org/en/humble/
-- Kalman Filter Tutorial: https://docs.ros.org/en/humble/Tutorials/Intermediate/Tf2/Learning-About-Tf2-And-Time.html
-- Particle Filter Tutorial: https://docs.ros.org/en/humble/Tutorials/Intermediate/Writing-a-Tf2-Static-Broadcaster-Py.html 
