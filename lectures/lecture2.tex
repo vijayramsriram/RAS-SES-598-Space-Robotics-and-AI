@@ -53,6 +53,23 @@
 \institute{Arizona State University \\ School of Earth and Space Exploration}
 \date{Spring 2025}
 
+% Reduce main text size by 20%
+\AtBeginDocument{\fontsize{8}{10}\selectfont}
+
+% TikZ styles for diagrams with reduced font size
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=5em, text centered, rounded corners, minimum height=4em, font=\fontsize{6}{8}\selectfont]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse, fill=red!20,
+    minimum height=2em, font=\fontsize{6}{8}\selectfont]
+
+% Reduce figure font sizes by 30%
+\tikzset{
+    every node/.style={font=\fontsize{5.6}{7}\selectfont},
+    every label/.style={font=\fontsize{5.6}{7}\selectfont},
+    every pin/.style={font=\fontsize{5.6}{7}\selectfont}
+}
+
 \begin{document}
 
 % Title slide
@@ -67,43 +84,56 @@
 
 \section{Kalman Filter Fundamentals}
 
-\begin{frame}{Introduction to Kalman Filters}
-    \begin{itemize}
-        \item<1-> \textbf{Key Concepts:}
-            \begin{itemize}
-                \item Recursive state estimation
-                \item Optimal for linear systems
-                \item Handles Gaussian uncertainty
-            \end{itemize}
-        \item<2-> \textbf{Applications in Navigation:}
-            \begin{itemize}
-                \item Spacecraft position tracking
-                \item Drone state estimation
-                \item Robot localization
-            \end{itemize}
-        \item<3-> \textbf{Advantages:}
-            \begin{itemize}
-                \item Computationally efficient
-                \item Handles noisy measurements
-                \item Provides uncertainty estimates
-            \end{itemize}
-    \end{itemize}
+\begin{frame}{Kalman Filter Overview}
+    \begin{tikzpicture}
+        \node[draw, rectangle] (prior) at (0,0) {Prior State};
+        \node[draw, rectangle] (measurement) at (4,0) {Measurement};
+        \node[draw, rectangle] (posterior) at (0,-2) {Posterior State};
+        
+        \draw[->, thick] (prior) -- node[right] {Prediction} (posterior);
+        \draw[->, thick] (measurement) -- node[left] {Update} (posterior);
+    \end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Kalman Filter Algorithm}
-    \begin{itemize}
-        \item<1-> \textbf{Prediction Step:}
-            \begin{align*}
-                \hat{x}_{k|k-1} &= F_k\hat{x}_{k-1|k-1} + B_ku_k \\
-                P_{k|k-1} &= F_kP_{k-1|k-1}F_k^T + Q_k
-            \end{align*}
-        \item<2-> \textbf{Update Step:}
-            \begin{align*}
-                K_k &= P_{k|k-1}H_k^T(H_kP_{k|k-1}H_k^T + R_k)^{-1} \\
-                \hat{x}_{k|k} &= \hat{x}_{k|k-1} + K_k(z_k - H_k\hat{x}_{k|k-1}) \\
-                P_{k|k} &= (I - K_kH_k)P_{k|k-1}
-            \end{align*}
-    \end{itemize}
+\begin{frame}{Kalman Filter Steps}
+    \begin{columns}[t]
+        \column{0.48\textwidth}
+        \textbf{Prediction Step}
+        \begin{tikzpicture}[scale=0.9]
+            \node[draw, rectangle] (state) at (0,0) {$x_k$};
+            \node[draw, rectangle] (predicted) at (3,0) {$\hat{x}_{k+1}$};
+            \node[draw, circle] (noise) at (3,1) {$w_k$};
+            
+            \draw[->, thick] (state) -- node[below] {$A$} (predicted);
+            \draw[->, thick] (noise) -- (predicted);
+        \end{tikzpicture}
+        
+        \vspace{0.5cm}
+        $\hat{x}_{k+1} = Ax_k + Bu_k$
+        \vspace{0.3cm}
+        
+        $P_{k+1} = AP_kA^T + Q$
+        
+        \column{0.48\textwidth}
+        \textbf{Update Step}
+        \begin{tikzpicture}[scale=0.9]
+            \node[draw, rectangle] (pred) at (0,0) {$\hat{x}_{k+1}$};
+            \node[draw, rectangle] (meas) at (3,0) {$z_{k+1}$};
+            \node[draw, circle] (noise) at (3,1) {$v_k$};
+            
+            \draw[->, thick] (pred) -- node[below] {$H$} (meas);
+            \draw[->, thick] (noise) -- (meas);
+        \end{tikzpicture}
+        
+        \vspace{0.5cm}
+        $K_{k+1} = P_{k+1}H^T(HP_{k+1}H^T + R)^{-1}$
+        \vspace{0.3cm}
+        
+        $x_{k+1} = \hat{x}_{k+1} + K_{k+1}(z_{k+1} - H\hat{x}_{k+1})$
+        \vspace{0.3cm}
+        
+        $P_{k+1} = (I - K_{k+1}H)P_{k+1}$
+    \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Implementation Example: Kalman Filter}
@@ -229,6 +259,83 @@ class ParticleFilter:
 \end{lstlisting}
 \end{frame}
 
+\section{Particle Filter}
+
+\begin{frame}{Particle Filter Overview}
+    \begin{tikzpicture}
+        \node[draw, rectangle] (init) at (0,0) {Initial Particles};
+        \node[draw, rectangle] (predict) at (3,0) {Prediction};
+        \node[draw, rectangle] (update) at (6,0) {Weight Update};
+        \node[draw, rectangle] (resample) at (3,-2) {Resampling};
+        \node[draw, circle] (noise) at (3,1) {Process Noise};
+        \node[draw, circle] (meas) at (6,1) {Measurement};
+        
+        \draw[->, thick] (init) -- (predict);
+        \draw[->, thick] (predict) -- (update);
+        \draw[->, thick] (update) -- (resample);
+        \draw[->, thick] (resample) -- ++(-0.5,0) |- (predict);
+        \draw[->, thick] (noise) -- (predict);
+        \draw[->, thick] (meas) -- (update);
+    \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Particle Filter Steps}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \textbf{Particle Propagation:}
+            \begin{tikzpicture}[scale=0.7]
+                % Draw coordinate system
+                \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+                \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+                
+                % Draw initial particles
+                \foreach \x/\y in {-1/0.5, -0.8/0.3, -0.6/0.7, -0.4/0.2, -0.2/0.4} {
+                    \fill[blue] (\x,\y) circle (2pt);
+                }
+                
+                % Draw propagated particles with noise
+                \foreach \x/\y in {0.2/0.8, 0.4/0.5, 0.6/1.0, 0.8/0.4, 1.0/0.7} {
+                    \fill[red] (\x,\y) circle (2pt);
+                    \draw[->,dashed] (\x-1,\y-0.3) -- (\x,\y);
+                }
+                
+                % Legend
+                \node[below right] at (1.5,-1.5) {\tiny Initial};
+                \fill[blue] (1.3,-1.5) circle (2pt);
+                \node[below right] at (1.5,-1.8) {\tiny Propagated};
+                \fill[red] (1.3,-1.8) circle (2pt);
+            \end{tikzpicture}
+        \end{column}
+        
+        \begin{column}{0.5\textwidth}
+            \textbf{Resampling:}
+            \begin{tikzpicture}[scale=0.7]
+                % Draw coordinate system
+                \draw[->] (-2,0) -- (2,0) node[right] {$x$};
+                \draw[->] (0,-2) -- (0,2) node[above] {$y$};
+                
+                % Draw weighted particles (size indicates weight)
+                \fill[red] (0.2,0.8) circle (4pt);
+                \fill[red] (0.4,0.5) circle (2pt);
+                \fill[red] (0.6,1.0) circle (5pt);
+                \fill[red] (0.8,0.4) circle (1pt);
+                \fill[red] (1.0,0.7) circle (3pt);
+                
+                % Draw resampled particles
+                \foreach \x/\y in {0.2/0.8, 0.2/0.8, 0.6/1.0, 0.6/1.0, 1.0/0.7} {
+                    \fill[blue] (\x+0.1,\y) circle (2pt);
+                }
+                
+                % Legend
+                \node[below right] at (1.5,-1.5) {\tiny Weighted};
+                \fill[red] (1.3,-1.5) circle (2pt);
+                \node[below right] at (1.5,-1.8) {\tiny Resampled};
+                \fill[blue] (1.3,-1.8) circle (2pt);
+            \end{tikzpicture}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 \section{Assignment 1: 2D State Estimation}
 
 \begin{frame}{Assignment Overview}
@@ -334,6 +441,23 @@ class StateEstimator(Node):
         \normalsize
         Contact: jdas5@asu.edu
     \end{center}
+\end{frame}
+
+\begin{frame}{Filter Performance Comparison}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \includegraphics[width=\textwidth]{filter_comparison.pdf}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \includegraphics[width=\textwidth]{error_comparison.pdf}
+        \end{column}
+    \end{columns}
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item Kalman Filter: Optimal for linear systems with Gaussian noise
+        \item Particle Filter: Better handles non-linear dynamics and non-Gaussian noise
+        \item Trade-off between computational cost and estimation accuracy
+    \end{itemize}
 \end{frame}
 
 \end{document} 
