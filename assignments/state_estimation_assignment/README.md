@@ -1,25 +1,12 @@
 # State Estimation Assignment
 
-This assignment focuses on implementing and comparing two fundamental state estimation techniques in robotics using ROS2. You will develop both a Kalman Filter and a Particle Filter to estimate a robot's state using simulated GPS and IMU measurements.
-
-## Learning Objectives
-
-By completing this assignment, you will:
-- Implement and understand core state estimation algorithms
-- Gain practical experience with ROS2 and sensor fusion
-- Learn to analyze and tune filter parameters
-- Develop skills in comparing different estimation approaches
+Implement and compare two fundamental state estimation techniques: Kalman Filter and Particle Filter.
 
 ## Prerequisites
 
 - ROS2 Humble
 - Python 3.8+
 - NumPy
-- Basic understanding of:
-  - State estimation concepts
-  - Probability theory
-  - Linear algebra
-  - ROS2 topics and nodes
 
 ## Installation
 
@@ -45,104 +32,72 @@ colcon build --packages-select state_estimation_assignment
 source ~/ros2_ws/install/setup.bash
 ```
 
-## Assignment Structure
+## Assignment Tasks
 
-The assignment is divided into two parts:
+### 1a. Kalman Filter Implementation (50 points)
 
-### Assignment 1a: Kalman Filter Implementation (50 points)
-
-Implement a Kalman filter to estimate the 2D pose (x, y, θ) of a differential drive robot.
-
-#### Tasks
+Complete the TODOs in `kalman_filter.py`:
 
 1. State Prediction (15 points)
-   - Implement the motion model in `kalman_filter.py`
-   - Update state mean using velocity and angular velocity
-   - Propagate state covariance with process noise
+   ```python
+   def predict(self, dt, velocity, angular_velocity):
+       """
+       TODO: Implement the prediction step
+       State: [x, y, theta]
+       Input: [v, w]
+       
+       Motion model:
+       x' = x + v*cos(theta)*dt
+       y' = y + v*sin(theta)*dt
+       theta' = theta + w*dt
+       """
+   ```
 
-2. Measurement Updates (20 points)
-   - Implement GPS measurement update (position measurements)
-   - Implement IMU measurement update (orientation measurements)
-   - Calculate appropriate Kalman gains
+2. Measurement Updates (35 points)
+   ```python
+   def update_gps(self, gps_measurement):
+       """
+       TODO: Implement GPS measurement update
+       Measurement: [x, y]
+       """
 
-3. Parameter Tuning (15 points)
-   - Tune process noise covariance Q
-   - Tune measurement noise covariance R
-   - Document your tuning process and reasoning
+   def update_imu(self, imu_measurement):
+       """
+       TODO: Implement IMU measurement update
+       Measurement: [theta]
+       """
+   ```
 
-#### Implementation Details
+### 1b. Particle Filter Implementation (50 points)
 
-The `kalman_filter.py` file contains the following structure:
-```python
-def predict(self, dt, velocity, angular_velocity):
-    """
-    TODO: Implement the prediction step
-    State: [x, y, theta]
-    Input: [v, w]
-    """
-    pass
-
-def update_gps(self, gps_measurement):
-    """
-    TODO: Implement GPS measurement update
-    Measurement: [x, y]
-    """
-    pass
-
-def update_imu(self, imu_measurement):
-    """
-    TODO: Implement IMU measurement update
-    Measurement: [theta]
-    """
-    pass
-```
-
-### Assignment 1b: Particle Filter Implementation (50 points)
-
-Implement a particle filter for the same robot state estimation problem.
-
-#### Tasks
+Complete the TODOs in `particle_filter.py`:
 
 1. Particle Prediction (15 points)
-   - Implement particle motion model
-   - Add appropriate process noise
-   - Handle particle state representation
+   ```python
+   def predict(self, dt, velocity, angular_velocity):
+       """
+       TODO: Implement particle prediction
+       Each particle: [x, y, theta, weight]
+       """
+   ```
 
-2. Measurement Updates (20 points)
-   - Implement measurement likelihood functions
-   - Update particle weights
-   - Normalize weights properly
+2. Measurement Update (20 points)
+   ```python
+   def update(self, gps_measurement, imu_measurement):
+       """
+       TODO: Implement measurement update and weight calculation
+       """
+   ```
 
 3. Resampling (15 points)
-   - Implement systematic resampling
-   - Calculate effective sample size
-   - Implement resampling threshold logic
+   ```python
+   def resample(self):
+       """
+       TODO: Implement systematic resampling
+       """
+   ```
 
-#### Implementation Details
-
-The `particle_filter.py` file contains:
-```python
-def predict(self, dt, velocity, angular_velocity):
-    """
-    TODO: Implement particle prediction
-    Each particle: [x, y, theta, weight]
-    """
-    pass
-
-def update(self, gps_measurement, imu_measurement):
-    """
-    TODO: Implement measurement update and weight calculation
-    """
-    pass
-
-def resample(self):
-    """
-    TODO: Implement systematic resampling when needed
-    """
-    pass
-```
-
-### Running and Testing
+## Testing Your Implementation
 
 1. Launch the simulation:
 ```bash
@@ -164,68 +119,28 @@ For particle filter visualization:
 ros2 run rviz2 rviz2
 ```
 
-## Deliverables and Grading
+## Submission
 
-Submit the following:
+1. Fork this repository
+2. Complete the implementations
+3. Create a README in your repository documenting:
+   - Your approach
+   - Parameter choices
+   - Results analysis
+   - Comparison between KF and PF
 
-1. Code Implementation (60%)
-   - Completed `kalman_filter.py` (30%)
-   - Completed `particle_filter.py` (30%)
-   - Code must be well-documented and follow Python style guidelines
+## Evaluation (100 points)
 
-2. Technical Report (40%)
-   - Implementation description (10%)
-   - Parameter tuning methodology (10%)
-   - Performance analysis (10%)
-   - Comparison of both filters (10%)
-
-### Report Requirements
-
-Your report should include:
-
-1. Algorithm Implementation
-   - Detailed description of your implementation
-   - Key design decisions and assumptions
-   - Mathematical formulation
-
-2. Parameter Tuning
-   - Description of tuning process
-   - Final parameter values with justification
-   - Analysis of parameter sensitivity
-
-3. Results Analysis
-   - Quantitative comparison of estimation accuracy
-   - Plots showing:
-     - True vs. estimated trajectories
-     - Error analysis over time
-     - Filter convergence behavior
-   - Performance comparison between KF and PF
-
-4. Discussion
-   - Strengths and weaknesses of each approach
-   - Challenges encountered and solutions
-   - Potential improvements
-
-## Evaluation Criteria
-
-Your submission will be evaluated out of 100 points based on:
-
-1. Correctness of implementation (30%)
-2. Code quality and documentation (20%)
-3. Parameter tuning and justification (20%)
-4. Analysis depth and insights (30%)
-
-## Resources
-
-- ROS2 Documentation: https://docs.ros.org/en/humble/
-- Probabilistic Robotics (Thrun, Burgard, Fox)
-- Course lecture notes
-- Example datasets for testing
-
-## Submission Instructions
-
-1. Push your code to your own repository
-2. Submit your report as a PDF via the course Canvas platform, include link to your repository
-3. Include any additional scripts or data used in your analysis in your repository. 
+- Correct implementation (60 points)
+  - Kalman Filter (30 points)
+  - Particle Filter (30 points)
+- Code quality (20 points)
+  - Documentation
+  - Style guidelines
+  - Readability
+- Results and analysis (20 points)
+  - Parameter tuning
+  - Performance comparison
+  - Implementation insights
 
 Deadline: January 21, 2025
