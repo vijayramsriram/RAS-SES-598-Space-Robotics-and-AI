@@ -1,9 +1,9 @@
 # State Estimation Assignments
 
-This package contains two assignments focused on state estimation techniques using ROS2:
+This package contains two parts of Assignment 1 focused on state estimation techniques using ROS2:
 
-1. Kalman Filter Implementation
-2. Particle Filter Implementation
+1a. Kalman Filter Implementation
+1b. Particle Filter Implementation
 
 ## Prerequisites
 
@@ -36,7 +36,7 @@ colcon build --packages-select state_estimation_assignment
 source ~/ros2_ws/install/setup.bash
 ```
 
-## Assignment 1: Kalman Filter
+## Assignment 1a: Kalman Filter
 
 In this assignment, you will implement a Kalman filter to estimate the state of a robot using GPS and IMU measurements.
 
@@ -67,7 +67,7 @@ Add these topics to plot:
 - `/estimated_state/pose/pose/position/x`
 - `/gps/pose/position/x`
 
-## Assignment 2: Particle Filter
+## Assignment 1b: Particle Filter
 
 In this assignment, you will implement a particle filter for state estimation.
 
