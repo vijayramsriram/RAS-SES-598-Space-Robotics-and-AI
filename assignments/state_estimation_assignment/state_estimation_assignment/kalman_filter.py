@@ -1,159 +1,135 @@
 #!/usr/bin/env python3
 
+import numpy as np
+from geometry_msgs.msg import PoseWithCovarianceStamped
+from sensor_msgs.msg import Imu
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import PoseStamped, TwistStamped
-from nav_msgs.msg import Odometry
-import numpy as np
 
-class KalmanFilterNode(Node):
+class KalmanFilter(Node):
     def __init__(self):
-        super().__init__('kalman_filter')
+        super().__init__('kalman_filter_node')
         
-        # Publishers
-        self.estimated_state_pub = self.create_publisher(
-            Odometry, 'estimated_state', 10)
+        # Initialize state [x, y, theta]
+        self.state = np.zeros(3)
+        self.covariance = np.eye(3)
         
-        # Subscribers
+        # Initialize noise parameters
+        self.Q = np.diag([0.1, 0.1, 0.1])  # Process noise
+        self.R_gps = np.diag([0.5, 0.5])    # GPS measurement noise
+        self.R_imu = np.array([[0.1]])       # IMU measurement noise
+        
+        # ROS publishers and subscribers
+        self.state_pub = self.create_publisher(
+            PoseWithCovarianceStamped, 
+            'estimated_state', 
+            10
+        )
+        
         self.gps_sub = self.create_subscription(
-            PoseStamped, 'gps/pose', self.gps_callback, 10)
+            PoseWithCovarianceStamped,
+            'gps',
+            self.gps_callback,
+            10
+        )
+        
         self.imu_sub = self.create_subscription(
-            TwistStamped, 'imu/velocity', self.imu_callback, 10)
+            Imu,
+            'imu',
+            self.imu_callback,
+            10
+        )
         
-        # Initialize state [x, y, vx, vy]
-        self.state = np.zeros(4)
-        self.covariance = np.eye(4) * 100  # High initial uncertainty
+        self.last_time = self.get_clock().now()
         
-        # System matrices
-        self.dt = 0.1  # Time step
+    def predict(self, dt, velocity, angular_velocity):
+        """
+        TODO: Implement the prediction step
+        State: [x, y, theta]
+        Input: [v, w]
         
-        # TODO: Students should complete these matrices
-        # State transition matrix F
-        self.F = np.array([
-            [1, 0, self.dt, 0],      # x = x + vx*dt
-            [0, 1, 0, self.dt],      # y = y + vy*dt
-            [0, 0, 1, 0],            # vx = vx
-            [0, 0, 0, 1]             # vy = vy
-        ])
-        
-        # Process noise covariance Q
-        # TODO: Students should tune this
-        self.Q = np.eye(4) * 0.1
-        
-        # Measurement matrix H for GPS (position only)
-        self.H_gps = np.array([
-            [1, 0, 0, 0],
-            [0, 1, 0, 0]
-        ])
-        
-        # Measurement matrix H for IMU (velocity only)
-        self.H_imu = np.array([
-            [0, 0, 1, 0],
-            [0, 0, 0, 1]
-        ])
-        
-        # Measurement noise covariance R
-        # TODO: Students should tune these
-        self.R_gps = np.eye(2) * 0.5
-        self.R_imu = np.eye(2) * 0.1
-        
-    def predict(self):
-        """TODO: Students should implement the prediction step"""
-        # State prediction
-        # self.state = ?
-        
-        # Covariance prediction
-        # self.covariance = ?
+        Motion model:
+        x' = x + v*cos(theta)*dt
+        y' = y + v*sin(theta)*dt
+        theta' = theta + w*dt
+        """
+        # Your code here
         pass
-    
-    def update_gps(self, measurement):
-        """TODO: Students should implement the GPS update step"""
-        # Innovation
-        # y = measurement - self.H_gps @ self.state
+
+    def update_gps(self, gps_measurement):
+        """
+        TODO: Implement GPS measurement update
+        Measurement: [x, y]
         
-        # Innovation covariance
-        # S = self.H_gps @ self.covariance @ self.H_gps.T + self.R_gps
-        
-        # Kalman gain
-        # K = ?
-        
-        # State update
-        # self.state = ?
-        
-        # Covariance update
-        # self.covariance = ?
+        1. Calculate Kalman gain
+        2. Update state
+        3. Update covariance
+        """
+        # Your code here
         pass
-    
-    def update_imu(self, measurement):
-        """TODO: Students should implement the IMU update step"""
-        # Similar to GPS update but with IMU matrices
+
+    def update_imu(self, imu_measurement):
+        """
+        TODO: Implement IMU measurement update
+        Measurement: [theta]
+        
+        1. Calculate Kalman gain
+        2. Update state
+        3. Update covariance
+        """
+        # Your code here
         pass
-    
+
     def gps_callback(self, msg):
-        """Handle incoming GPS messages"""
-        # Extract measurement
-        measurement = np.array([
-            msg.pose.position.x,
-            msg.pose.position.y
+        """Handle incoming GPS measurements"""
+        gps_measurement = np.array([
+            msg.pose.pose.position.x,
+            msg.pose.pose.position.y
         ])
-        
-        # Perform prediction and update
-        self.predict()
-        self.update_gps(measurement)
-        
-        # Publish current estimate
-        self.publish_estimate(msg.header.stamp)
-    
+        self.update_gps(gps_measurement)
+        self.publish_state()
+
     def imu_callback(self, msg):
-        """Handle incoming IMU messages"""
-        # Extract measurement
-        measurement = np.array([
-            msg.twist.linear.x,
-            msg.twist.linear.y
-        ])
-        
-        # Perform prediction and update
-        self.predict()
-        self.update_imu(measurement)
-        
-        # Publish current estimate
-        self.publish_estimate(msg.header.stamp)
-    
-    def publish_estimate(self, stamp):
+        """Handle incoming IMU measurements"""
+        # Extract orientation (assuming 2D, using yaw only)
+        # In practice, you would use tf transformations
+        orientation = msg.orientation
+        # Convert quaternion to yaw
+        imu_measurement = np.array([np.arctan2(2.0 * (orientation.w * orientation.z + 
+                                                     orientation.x * orientation.y),
+                                             1.0 - 2.0 * (orientation.y * orientation.y + 
+                                                         orientation.z * orientation.z))])
+        self.update_imu(imu_measurement)
+        self.publish_state()
+
+    def publish_state(self):
         """Publish the current state estimate"""
-        msg = Odometry()
-        msg.header.stamp = stamp
-        msg.header.frame_id = 'map'
-        msg.child_frame_id = 'base_link'
+        msg = PoseWithCovarianceStamped()
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.header.frame_id = "map"
         
-        # Fill position
         msg.pose.pose.position.x = self.state[0]
         msg.pose.pose.position.y = self.state[1]
-        msg.pose.pose.position.z = 0.0
         
-        # Fill velocity
-        msg.twist.twist.linear.x = self.state[2]
-        msg.twist.twist.linear.y = self.state[3]
-        msg.twist.twist.linear.z = 0.0
+        # Convert theta to quaternion
+        theta = self.state[2]
+        msg.pose.pose.orientation.w = np.cos(theta/2)
+        msg.pose.pose.orientation.z = np.sin(theta/2)
         
-        # Fill covariance (only diagonal elements)
-        msg.pose.covariance[0] = self.covariance[0,0]
-        msg.pose.covariance[7] = self.covariance[1,1]
-        msg.twist.covariance[0] = self.covariance[2,2]
-        msg.twist.covariance[7] = self.covariance[3,3]
+        # Fill covariance (6x6 matrix in ROS message)
+        ros_covariance = np.zeros((6,6))
+        ros_covariance[0:2, 0:2] = self.covariance[0:2, 0:2]
+        ros_covariance[5,5] = self.covariance[2,2]
+        msg.pose.covariance = ros_covariance.flatten().tolist()
         
-        self.estimated_state_pub.publish(msg)
+        self.state_pub.publish(msg)
 
 def main(args=None):
     rclpy.init(args=args)
-    node = KalmanFilterNode()
-    try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        node.destroy_node()
-        rclpy.shutdown()
+    node = KalmanFilter()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == '__main__':
     main() 

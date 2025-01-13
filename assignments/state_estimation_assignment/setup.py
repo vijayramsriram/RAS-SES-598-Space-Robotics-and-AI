@@ -1,6 +1,4 @@
 from setuptools import setup
-import os
-from glob import glob
 
 package_name = 'state_estimation_assignment'
 
@@ -12,14 +10,14 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
+        ('share/' + package_name + '/launch', ['launch/state_estimation.launch.py']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='Jnaneshwar Das',
-    maintainer_email='jdas5@asu.edu',
-    description='ROS2 package for SES/RAS 598 state estimation assignments',
-    license='MIT',
+    maintainer='course_admin',
+    maintainer_email='admin@example.com',
+    description='State estimation assignment package',
+    license='Apache License 2.0',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [

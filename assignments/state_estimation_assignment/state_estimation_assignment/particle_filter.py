@@ -1,210 +1,159 @@
 #!/usr/bin/env python3
 
+import numpy as np
+from geometry_msgs.msg import PoseWithCovarianceStamped
+from sensor_msgs.msg import Imu
+from visualization_msgs.msg import MarkerArray, Marker
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import PoseStamped, TwistStamped
-from nav_msgs.msg import Odometry
-from visualization_msgs.msg import MarkerArray, Marker
-import numpy as np
 
-class ParticleFilterNode(Node):
+class ParticleFilter(Node):
     def __init__(self):
-        super().__init__('particle_filter')
+        super().__init__('particle_filter_node')
         
-        # Publishers
-        self.estimated_state_pub = self.create_publisher(
-            Odometry, 'estimated_state', 10)
-        self.particle_pub = self.create_publisher(
-            MarkerArray, 'particles', 10)
+        # Filter parameters
+        self.num_particles = 100
+        self.resample_threshold = self.num_particles / 2
         
-        # Subscribers
-        self.gps_sub = self.create_subscription(
-            PoseStamped, 'gps/pose', self.gps_callback, 10)
-        self.imu_sub = self.create_subscription(
-            TwistStamped, 'imu/velocity', self.imu_callback, 10)
-        
-        # Parameters
-        self.declare_parameter('num_particles', 100)
-        self.num_particles = self.get_parameter('num_particles').value
-        
-        # Initialize particles [x, y, vx, vy] and weights
+        # Initialize particles [x, y, theta, weight]
         self.particles = np.zeros((self.num_particles, 4))
-        self.weights = np.ones(self.num_particles) / self.num_particles
+        self.particles[:,3] = 1.0 / self.num_particles  # Initialize weights
         
-        # System parameters
-        self.dt = 0.1  # Time step
+        # Noise parameters
+        self.motion_noise = np.diag([0.1, 0.1, 0.1])
+        self.gps_noise = np.diag([0.5, 0.5])
+        self.imu_noise = 0.1
         
-        # TODO: Students should tune these parameters
-        self.motion_noise = np.array([0.1, 0.1, 0.05, 0.05])  # Motion model noise
-        self.gps_noise = 0.5  # GPS measurement noise
-        self.imu_noise = 0.1  # IMU measurement noise
+        # Publishers and subscribers
+        self.state_pub = self.create_publisher(
+            PoseWithCovarianceStamped, 
+            'estimated_state', 
+            10
+        )
         
-    def predict(self):
-        """TODO: Students should implement the prediction step
+        self.particle_pub = self.create_publisher(
+            MarkerArray,
+            'particles',
+            10
+        )
         
-        This should:
-        1. Propagate each particle through the motion model
-        2. Add random noise to represent uncertainty in motion
+        self.gps_sub = self.create_subscription(
+            PoseWithCovarianceStamped,
+            'gps',
+            self.gps_callback,
+            10
+        )
+        
+        self.imu_sub = self.create_subscription(
+            Imu,
+            'imu',
+            self.imu_callback,
+            10
+        )
+        
+        self.last_time = self.get_clock().now()
+
+    def predict(self, dt, velocity, angular_velocity):
         """
-        # Example motion model (students should modify this)
-        # for i in range(self.num_particles):
-        #     # Update position based on velocity
-        #     self.particles[i, 0] += self.particles[i, 2] * self.dt
-        #     self.particles[i, 1] += self.particles[i, 3] * self.dt
-        #     
-        #     # Add noise
-        #     self.particles[i] += np.random.normal(0, self.motion_noise)
-        pass
-    
-    def update_gps(self, measurement):
-        """TODO: Students should implement the GPS measurement update
+        TODO: Implement particle prediction
+        Each particle: [x, y, theta, weight]
         
-        This should:
-        1. Update particle weights based on GPS measurement likelihood
+        1. Apply motion model to each particle
+        2. Add noise to prediction
+        """
+        # Your code here
+        pass
+
+    def update(self, gps_measurement, imu_measurement):
+        """
+        TODO: Implement measurement update and weight calculation
+        
+        1. Update particle weights based on measurements
         2. Normalize weights
-        3. Compute effective sample size and resample if needed
+        3. Calculate effective sample size
+        4. Trigger resampling if needed
         """
-        # Example weight update (students should modify this)
-        # for i in range(self.num_particles):
-        #     # Compute likelihood of measurement given particle state
-        #     error = measurement - self.particles[i, :2]
-        #     self.weights[i] *= np.exp(-np.sum(error**2) / (2 * self.gps_noise**2))
-        #
-        # Normalize weights
-        # self.weights /= np.sum(self.weights)
+        # Your code here
         pass
-    
-    def update_imu(self, measurement):
-        """TODO: Students should implement the IMU measurement update
-        
-        Similar to GPS update but using velocity measurements
-        """
-        pass
-    
+
     def resample(self):
-        """TODO: Students should implement resampling
-        
-        This should:
-        1. Compute effective sample size
-        2. If ESS < threshold, resample particles based on weights
-        3. Reset weights to uniform
         """
-        # Example resampling (students should modify this)
-        # eff_sample_size = 1.0 / np.sum(self.weights**2)
-        # if eff_sample_size < self.num_particles / 2:
-        #     # Resample using numpy's choice
-        #     indices = np.random.choice(
-        #         self.num_particles,
-        #         size=self.num_particles,
-        #         p=self.weights
-        #     )
-        #     self.particles = self.particles[indices]
-        #     self.weights = np.ones(self.num_particles) / self.num_particles
+        TODO: Implement systematic resampling
+        
+        1. Create cumulative sum of weights
+        2. Generate systematic sampling points
+        3. Create new particle set
+        4. Reset weights
+        """
+        # Your code here
         pass
-    
-    def gps_callback(self, msg):
-        """Handle incoming GPS messages"""
-        # Extract measurement
-        measurement = np.array([
-            msg.pose.position.x,
-            msg.pose.position.y
-        ])
-        
-        # Perform prediction and update
-        self.predict()
-        self.update_gps(measurement)
-        self.resample()
-        
-        # Publish current estimate and particles
-        self.publish_estimate(msg.header.stamp)
-        self.publish_particles(msg.header.stamp)
-    
-    def imu_callback(self, msg):
-        """Handle incoming IMU messages"""
-        # Extract measurement
-        measurement = np.array([
-            msg.twist.linear.x,
-            msg.twist.linear.y
-        ])
-        
-        # Perform prediction and update
-        self.predict()
-        self.update_imu(measurement)
-        self.resample()
-        
-        # Publish current estimate and particles
-        self.publish_estimate(msg.header.stamp)
-        self.publish_particles(msg.header.stamp)
-    
-    def get_estimated_state(self):
-        """Compute estimated state as weighted average of particles"""
-        return np.average(self.particles, weights=self.weights, axis=0)
-    
-    def publish_estimate(self, stamp):
-        """Publish the current state estimate"""
-        state = self.get_estimated_state()
-        
-        msg = Odometry()
-        msg.header.stamp = stamp
-        msg.header.frame_id = 'map'
-        msg.child_frame_id = 'base_link'
-        
-        # Fill position
-        msg.pose.pose.position.x = state[0]
-        msg.pose.pose.position.y = state[1]
-        msg.pose.pose.position.z = 0.0
-        
-        # Fill velocity
-        msg.twist.twist.linear.x = state[2]
-        msg.twist.twist.linear.y = state[3]
-        msg.twist.twist.linear.z = 0.0
-        
-        self.estimated_state_pub.publish(msg)
-    
-    def publish_particles(self, stamp):
+
+    def get_effective_sample_size(self):
+        """Calculate the effective sample size based on weights"""
+        return 1.0 / np.sum(np.square(self.particles[:,3]))
+
+    def estimate_state(self):
+        """Compute weighted mean of particle states"""
+        mean_state = np.average(self.particles[:,:3], weights=self.particles[:,3], axis=0)
+        return mean_state
+
+    def publish_particles(self):
         """Publish particle visualization markers"""
         marker_array = MarkerArray()
         
-        for i in range(self.num_particles):
+        for i, particle in enumerate(self.particles):
             marker = Marker()
-            marker.header.frame_id = 'map'
-            marker.header.stamp = stamp
-            marker.ns = 'particles'
+            marker.header.frame_id = "map"
+            marker.header.stamp = self.get_clock().now().to_msg()
             marker.id = i
-            marker.type = Marker.SPHERE
+            marker.type = Marker.ARROW
             marker.action = Marker.ADD
+            marker.pose.position.x = particle[0]
+            marker.pose.position.y = particle[1]
             
-            # Position
-            marker.pose.position.x = self.particles[i, 0]
-            marker.pose.position.y = self.particles[i, 1]
-            marker.pose.position.z = 0.0
+            # Convert theta to quaternion
+            theta = particle[2]
+            marker.pose.orientation.w = np.cos(theta/2)
+            marker.pose.orientation.z = np.sin(theta/2)
             
-            # Scale (size based on weight)
-            scale = 0.1 * (self.weights[i] * self.num_particles)
-            marker.scale.x = scale
-            marker.scale.y = scale
-            marker.scale.z = scale
+            # Size and color based on weight
+            marker.scale.x = 0.3
+            marker.scale.y = 0.05
+            marker.scale.z = 0.05
             
-            # Color (blue with alpha based on weight)
-            marker.color.r = 0.0
-            marker.color.g = 0.0
-            marker.color.b = 1.0
-            marker.color.a = min(1.0, self.weights[i] * self.num_particles)
+            marker.color.a = 0.5
+            marker.color.r = particle[3] * self.num_particles
+            marker.color.g = 0.2
+            marker.color.b = 0.2
             
             marker_array.markers.append(marker)
         
         self.particle_pub.publish(marker_array)
 
+    def publish_state(self):
+        """Publish the estimated state"""
+        state = self.estimate_state()
+        
+        msg = PoseWithCovarianceStamped()
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.header.frame_id = "map"
+        
+        msg.pose.pose.position.x = state[0]
+        msg.pose.pose.position.y = state[1]
+        
+        # Convert theta to quaternion
+        theta = state[2]
+        msg.pose.pose.orientation.w = np.cos(theta/2)
+        msg.pose.pose.orientation.z = np.sin(theta/2)
+        
+        self.state_pub.publish(msg)
+
 def main(args=None):
     rclpy.init(args=args)
-    node = ParticleFilterNode()
-    try:
-        rclpy.spin(node)
-    except KeyboardInterrupt:
-        pass
-    finally:
-        node.destroy_node()
-        rclpy.shutdown()
+    node = ParticleFilter()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == '__main__':
     main() 
