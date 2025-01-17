@@ -130,4 +130,4 @@ Add these topics to plot:
   - Safety verification
   - Implementation insights
 
-Deadline: February 21, 2025 
+Deadline: January 28, 2025 
