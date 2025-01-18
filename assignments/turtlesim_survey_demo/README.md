@@ -17,8 +17,8 @@ Choose one of the following combinations:
 - Ubuntu 22.04 + ROS2 Humble
 - Ubuntu 23.04 + ROS2 Iron
 - Ubuntu 23.10 + ROS2 Iron
-- Ubuntu 24.04 + ROS2 Jazzy (when released)
-
+- Ubuntu 24.04 + ROS2 Jazzy
+- 
 ### Required Packages
 - Python 3.8+ (for Ubuntu 22.04) or Python 3.10+ (for Ubuntu 23.04+)
 - ROS2 base installation
