@@ -4,13 +4,13 @@
 ## Background
 Lawnmower patterns (also known as boustrophedon paths) are fundamental survey trajectories used in robotics, space exploration, and Earth observation. These patterns are crucial for:
 
-- **Space Exploration**: Mars rovers use lawnmower patterns to systematically survey areas of interest, ensuring complete coverage when searching for geological samples or mapping terrain.
+- **Space Exploration**: Rovers could use lawnmower patterns to systematically survey areas of interest, ensuring complete coverage when searching for geological samples or mapping terrain. However, due to energy constraints, informative paths should be optimized, and this results in paths that are sparser than lawmower sampling, however, may still produce high-accuracy reconstructions. 
   
-- **Earth Observation**: Satellites and aerial vehicles employ these patterns for:
+- **Earth Observation**: Aerial vehicles employ these patterns for:
   - Agricultural monitoring and precision farming
   - Search and rescue operations
   - Environmental mapping and monitoring
-  - Archaeological surveys
+  - Geological or archaeological surveys
   
 - **Ocean Exploration**: Autonomous underwater vehicles (AUVs) use lawnmower patterns to:
   - Map the ocean floor
