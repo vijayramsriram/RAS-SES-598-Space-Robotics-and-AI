@@ -185,4 +185,20 @@ Add these topics:
 - Acceptable tracking (cross-track error < 0.8 units): 80%
 - Poor tracking (cross-track error > 0.8 units): 60% or lower
 
-Note: Final grade will also consider documentation quality and analysis depth. 
+Note: Final grade will also consider documentation quality and analysis depth.
+
+## Extra Credit (10 points)
+Create and implement a custom ROS2 message type to publish detailed performance metrics:
+- Define a custom message type with fields for:
+  - Cross-track error
+  - Current velocity
+  - Distance to next waypoint
+  - Completion percentage
+  - Other relevant metrics
+- Implement the message publisher in your node
+- Document the message structure and usage
+
+This will demonstrate understanding of:
+- ROS2 message definitions
+- Custom interface creation
+- Message publishing patterns 
