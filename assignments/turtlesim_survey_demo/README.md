@@ -88,21 +88,17 @@ Provide a detailed analysis of your tuning process:
 ## Getting Started
 
 ### Repository Setup
-1. Fork the repository:
-   - Visit: https://github.com/robomechanics/turtlesim_survey_demo
-   - Click "Fork" in the top-right corner
-   - Select your GitHub account as the destination
+1. Create your assignment repository:
+   - Visit: https://github.com/jdas2/ros2_turtlesim_survey
+   - Click "Use this template" or "Fork"
+   - Name your repository "ros2_turtlesim_survey"
+   - Make it Public
+   - Create repository
 
-2. Clone your fork:
+2. Clone your repository:
 ```bash
 cd ~/ros2_ws/src
-git clone https://github.com/YOUR_USERNAME/turtlesim_survey_demo.git
-```
-
-3. Set up upstream remote (for future updates):
-```bash
-cd turtlesim_survey_demo
-git remote add upstream https://github.com/robomechanics/turtlesim_survey_demo.git
+git clone https://github.com/YOUR_USERNAME/ros2_turtlesim_survey.git
 ```
 
 ### Building and Running
