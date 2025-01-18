@@ -1,6 +1,24 @@
 ![image](https://github.com/user-attachments/assets/e5d37e4c-4d6f-47b2-8221-36a734c9a230)
 # Assignment: Turtlesim Lawnmower Pattern Control
 
+## Background
+Lawnmower patterns (also known as boustrophedon paths) are fundamental survey trajectories used in robotics, space exploration, and Earth observation. These patterns are crucial for:
+
+- **Space Exploration**: Mars rovers use lawnmower patterns to systematically survey areas of interest, ensuring complete coverage when searching for geological samples or mapping terrain.
+  
+- **Earth Observation**: Satellites and aerial vehicles employ these patterns for:
+  - Agricultural monitoring and precision farming
+  - Search and rescue operations
+  - Environmental mapping and monitoring
+  - Archaeological surveys
+  
+- **Ocean Exploration**: Autonomous underwater vehicles (AUVs) use lawnmower patterns to:
+  - Map the ocean floor
+  - Search for shipwrecks or aircraft debris
+  - Monitor marine ecosystems
+  
+The efficiency and accuracy of these surveys depend heavily on the robot's ability to follow the prescribed path with minimal deviation (cross-track error). This assignment simulates these real-world challenges in a 2D environment using the turtlesim robot.
+
 ## Objective
 Tune a PD controller to make a turtle execute the most precise lawnmower pattern possible in the turtlesim environment. The goal is to minimize the cross-track error while maintaining smooth motion.
 
