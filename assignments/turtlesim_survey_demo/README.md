@@ -134,7 +134,7 @@ Add these topics:
 - Consider the trade-off between speed and accuracy
 
 ## Deadline
-Submit your tuned implementation by February 1, 2025
+Submit your tuned implementation by January 27, 2025
 
 ## Grading Rubric
 - Perfect tracking (cross-track error < 0.05m): 100%
