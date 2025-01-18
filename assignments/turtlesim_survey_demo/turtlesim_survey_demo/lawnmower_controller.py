@@ -5,6 +5,7 @@ from turtlesim.msg import Pose
 import numpy as np
 import math
 from collections import deque
+from std_msgs.msg import Float64
 
 
 class LawnmowerController(Node):
@@ -38,6 +39,13 @@ class LawnmowerController(Node):
         # Create control loop timer
         self.timer = self.create_timer(0.1, self.control_loop)
         
+        # Add publisher for cross-track error
+        self.error_pub = self.create_publisher(
+            Float64, 
+            'cross_track_error', 
+            10
+        )
+        
         self.get_logger().info('Lawnmower controller started')
         self.get_logger().info(f'Following waypoints: {self.waypoints}')
 
@@ -60,51 +68,65 @@ class LawnmowerController(Node):
         return waypoints
 
     def calculate_cross_track_error(self):
+        """
+        Calculate signed cross-track error from current position to line segment
+        Returns:
+            float: Signed cross-track error (positive = left of path, negative = right of path)
+        """
         if self.current_waypoint < 1:
             return 0.0
             
         # Get current line segment endpoints
-        start = self.waypoints[self.current_waypoint - 1]
-        end = self.waypoints[self.current_waypoint]
+        start = np.array(self.waypoints[self.current_waypoint - 1])
+        end = np.array(self.waypoints[self.current_waypoint])
+        pos = np.array([self.pose.x, self.pose.y])
         
-        # Calculate cross track error (distance from point to line segment)
-        x1, y1 = start
-        x2, y2 = end
-        x0, y0 = self.pose.x, self.pose.y
-        
-        # Vector from start to end
-        dx = x2 - x1
-        dy = y2 - y1
-        
-        # Length of line segment squared
-        d2 = dx*dx + dy*dy
-        
-        if d2 == 0:  # If points are the same
-            return math.sqrt((x0 - x1)**2 + (y0 - y1)**2)
+        # Calculate path vector and normalize
+        path_vector = end - start
+        path_length = np.linalg.norm(path_vector)
+        if path_length < 1e-6:  # Avoid division by zero
+            return np.linalg.norm(pos - start)
             
-        # Calculate projection point parameter
-        t = max(0, min(1, ((x0 - x1)*dx + (y0 - y1)*dy) / d2))
+        path_unit = path_vector / path_length
         
-        # Calculate projection point
-        proj_x = x1 + t*dx
-        proj_y = y1 + t*dy
+        # Vector from start to current position
+        pos_vector = pos - start
         
-        # Calculate distance to projection point (cross-track error)
-        error = math.sqrt((x0 - proj_x)**2 + (y0 - proj_y)**2)
+        # Calculate projection length along path
+        projection_length = np.dot(pos_vector, path_unit)
+        
+        # Clamp projection to line segment
+        projection_length = max(0, min(path_length, projection_length))
+        
+        # Calculate projected point on path
+        projected_point = start + projection_length * path_unit
+        
+        # Calculate error vector
+        error_vector = pos - projected_point
+        
+        # Calculate signed error (positive = left of path, negative = right of path)
+        # Using 2D cross product for sign
+        error_sign = np.sign(np.cross(path_unit, error_vector/np.linalg.norm(error_vector)))
+        error = np.linalg.norm(error_vector) * error_sign
         
         # Store error and calculate statistics
-        self.cross_track_errors.append(error)
+        self.cross_track_errors.append(abs(error))  # Store absolute error for statistics
         current_avg = sum(self.cross_track_errors) / len(self.cross_track_errors)
         current_max = max(self.cross_track_errors)
         current_min = min(self.cross_track_errors)
         
-        # Log statistics every update
+        # Publish error
+        error_msg = Float64()
+        error_msg.data = error
+        self.error_pub.publish(error_msg)
+        
+        # Log statistics
         self.get_logger().info(
             f'Cross-track error - Current: {error:.3f}, '
             f'Avg: {current_avg:.3f}, '
             f'Min: {current_min:.3f}, '
             f'Max: {current_max:.3f}, '
-            f'Segment: ({x1:.1f},{y1:.1f})->({x2:.1f},{y2:.1f})'
+            f'Segment: ({start[0]:.1f},{start[1]:.1f})->({end[0]:.1f},{end[1]:.1f})'
         )
         
         return error

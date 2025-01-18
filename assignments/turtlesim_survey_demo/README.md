@@ -36,7 +36,7 @@ Choose one of the following combinations:
 - Ubuntu 23.04 + ROS2 Iron
 - Ubuntu 23.10 + ROS2 Iron
 - Ubuntu 24.04 + ROS2 Jazzy
-- 
+
 ### Required Packages
 - Python 3.8+ (for Ubuntu 22.04) or Python 3.10+ (for Ubuntu 23.04+)
 - ROS2 base installation
@@ -120,16 +120,22 @@ ros2 launch turtlesim_survey_demo survey_demo.launch.py
 
 3. Monitor performance:
 ```bash
-ros2 topic echo /lawnmower_controller/cross_track_error
+# View cross-track error as a number
+ros2 topic echo /cross_track_error
+
+# Or view detailed statistics in the launch terminal
 ```
 
-4. Visualize trajectory:
+4. Visualize trajectory and performance:
 ```bash
 ros2 run rqt_plot rqt_plot
 ```
 Add these topics:
 - /turtle1/pose/x
 - /turtle1/pose/y
+- /turtle1/cmd_vel/linear/x
+- /turtle1/cmd_vel/angular/z
+- /cross_track_error
 
 ## Evaluation Criteria
 
