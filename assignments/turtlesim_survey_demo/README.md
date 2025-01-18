@@ -2,6 +2,8 @@
 
 ## Objective
 Tune a PD controller to make a turtle execute the most precise lawnmower pattern possible in the turtlesim environment. The goal is to minimize the cross-track error while maintaining smooth motion.
+![image](https://github.com/user-attachments/assets/e5d37e4c-4d6f-47b2-8221-36a734c9a230)
+
 
 ## Learning Outcomes
 - Understanding PD control parameters and their effects
