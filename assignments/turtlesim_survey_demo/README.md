@@ -68,10 +68,27 @@ Provide a detailed analysis of your tuning process:
 
 ## Getting Started
 
-1. Build the package:
+### Repository Setup
+1. Fork the repository:
+   - Visit: https://github.com/robomechanics/turtlesim_survey_demo
+   - Click "Fork" in the top-right corner
+   - Select your GitHub account as the destination
+
+2. Clone your fork:
 ```bash
 cd ~/ros2_ws/src
-git clone <repository_url>
+git clone https://github.com/YOUR_USERNAME/turtlesim_survey_demo.git
+```
+
+3. Set up upstream remote (for future updates):
+```bash
+cd turtlesim_survey_demo
+git remote add upstream https://github.com/robomechanics/turtlesim_survey_demo.git
+```
+
+### Building and Running
+1. Build the package:
+```bash
 cd ~/ros2_ws
 colcon build --packages-select turtlesim_survey_demo
 source install/setup.bash
@@ -115,16 +132,26 @@ Add these topics:
 
 ## Submission Requirements
 
-1. Modified controller code with your tuned parameters
-2. README file containing:
-   - Final parameter values with justification
-   - Performance metrics and analysis
-   - Plots showing:
-     - Cross-track error over time
-     - Trajectory plot
-     - Velocity profiles
-   - Discussion of tuning methodology
-   - Challenges and solutions
+1. GitHub Repository:
+   - Your fork should be public and contain all code changes
+   - Commit messages should be descriptive
+   - Include a clear version history of your tuning process
+
+2. Documentation in Repository:
+   - Update the README.md in your fork with:
+     - Final parameter values with justification
+     - Performance metrics and analysis
+     - Plots showing:
+       - Cross-track error over time
+       - Trajectory plot
+       - Velocity profiles
+     - Discussion of tuning methodology
+     - Challenges and solutions
+
+3. Submit your work:
+   - Submit the URL of your GitHub repository
+   - Ensure your repository is public
+   - Final commit should be before the deadline
 
 ## Tips for Success
 - Start with low gains and increase gradually
