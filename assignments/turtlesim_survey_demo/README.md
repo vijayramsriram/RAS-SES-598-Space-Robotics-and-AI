@@ -158,9 +158,7 @@ Add these topics:
 ## Submission Requirements
 
 1. GitHub Repository:
-   - Your fork should be public and contain all code changes
    - Commit messages should be descriptive
-   - Include a clear version history of your tuning process
 
 2. Documentation in Repository:
    - Update the README.md in your fork with:
