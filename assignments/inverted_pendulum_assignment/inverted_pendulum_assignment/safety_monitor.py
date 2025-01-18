@@ -11,9 +11,9 @@ class SafetyMonitor(Node):
         
         # Safety parameters
         self.max_position = 1.0  # meters
-        self.max_velocity = 2.0  # m/s
+        self.max_velocity = 0.1  # m/s
         self.max_angle = np.pi/4  # radians
-        self.max_angular_velocity = np.pi  # rad/s
+        self.max_angular_velocity = np.pi/4.0  # rad/s
         self.max_force = 20.0  # N
         
         # Publishers and subscribers
