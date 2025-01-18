@@ -88,17 +88,21 @@ Provide a detailed analysis of your tuning process:
 ## Getting Started
 
 ### Repository Setup
-1. Create your assignment repository:
-   - Visit: https://github.com/jdas2/ros2_turtlesim_survey
-   - Click "Use this template" or "Fork"
-   - Name your repository "ros2_turtlesim_survey"
-   - Make it Public
-   - Create repository
+1. Fork the course repository:
+   - Visit: https://github.com/DREAMS-lab/RAS-SES-598-Space-Robotics-and-AI
+   - Click "Fork" in the top-right corner
+   - Select your GitHub account as the destination
 
-2. Clone your repository:
+2. Clone your fork (outside of ros2_ws):
+```bash
+cd ~/
+git clone https://github.com/YOUR_USERNAME/RAS-SES-598-Space-Robotics-and-AI.git
+```
+
+3. Create a symlink to the assignment in your ROS2 workspace:
 ```bash
 cd ~/ros2_ws/src
-git clone https://github.com/YOUR_USERNAME/ros2_turtlesim_survey.git
+ln -s ~/RAS-SES-598-Space-Robotics-and-AI/assignments/turtlesim_survey_demo .
 ```
 
 ### Building and Running
