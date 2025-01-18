@@ -1,3 +1,4 @@
+![image](https://github.com/user-attachments/assets/e5d37e4c-4d6f-47b2-8221-36a734c9a230)
 # Assignment: Turtlesim Lawnmower Pattern Control
 
 ## Objective
@@ -16,8 +17,8 @@ Choose one of the following combinations:
 - Ubuntu 22.04 + ROS2 Humble
 - Ubuntu 23.04 + ROS2 Iron
 - Ubuntu 23.10 + ROS2 Iron
-- Ubuntu 24.04 + ROS2 Jazzy (when released)
-
+- Ubuntu 24.04 + ROS2 Jazzy
+- 
 ### Required Packages
 - Python 3.8+ (for Ubuntu 22.04) or Python 3.10+ (for Ubuntu 23.04+)
 - ROS2 base installation
@@ -161,7 +162,7 @@ Add these topics:
 - Consider the trade-off between speed and accuracy
 
 ## Deadline
-Submit your tuned implementation by February 1, 2025
+Submit your tuned implementation by January 27, 2025
 
 ## Grading Rubric
 - Perfect tracking (cross-track error < 0.05m): 100%
