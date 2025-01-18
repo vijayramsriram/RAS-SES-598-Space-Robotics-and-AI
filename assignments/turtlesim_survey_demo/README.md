@@ -10,15 +10,32 @@ Tune a PD controller to make a turtle execute the most precise lawnmower pattern
 - ROS2 visualization and debugging
 
 ## Prerequisites
-- ROS2 Humble
-- Python 3.8+
-- turtlesim package
-- rqt_plot
+
+### System Requirements
+Choose one of the following combinations:
+- Ubuntu 22.04 + ROS2 Humble
+- Ubuntu 23.04 + ROS2 Iron
+- Ubuntu 23.10 + ROS2 Iron
+- Ubuntu 24.04 + ROS2 Jazzy (when released)
+
+### Required Packages
+- Python 3.8+ (for Ubuntu 22.04) or Python 3.10+ (for Ubuntu 23.04+)
+- ROS2 base installation
+- Additional ROS2 packages:
+  ```bash
+  sudo apt install ros-$ROS_DISTRO-turtlesim
+  sudo apt install ros-$ROS_DISTRO-rqt*
+  ```
+
+### Python Dependencies
+```bash
+pip3 install numpy matplotlib
+```
 
 ## The Challenge
 
 ### 1. Controller Tuning (60 points)
-Tune the following PD controller parameters to achieve optimal performance:
+Use rqt_reconfigure to tune the following PD controller parameters in real-time:
 ```python
 # Controller parameters to tune
 self.Kp_linear = 1.0   # Proportional gain for linear velocity
