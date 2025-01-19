@@ -1,12 +1,12 @@
 # First-Order Boustrophedon Navigator
 ![image](https://github.com/user-attachments/assets/940fc6bc-fcee-4d11-8bc8-d53a650aaf80)
 
-In this assignment, you will ROS2 and the Turtlesim, to tune a navigator to implement a lawnmower survey (a boustrophedon pattern). The current code will do a pattern shown above. Look at how lawnmower surveys are typically executed, and modify the code as instructed in the descriptions below. 
+In this assignment, you will understand the provided package in ROS2 with Turtlesim, to tune a navigator to implement a lawnmower survey (a boustrophedon pattern). The current code will do a pattern shown above. Explore literature onhow lawnmower surveys are typically executed, and modify the code to meet the requirements. 
 
 ## Background
 Boustrophedon patterns (from Greek: "ox-turning", like an ox drawing a plow) are fundamental survey trajectories used in robotics, space exploration, and Earth observation. These patterns are useful for:
 
-- **Space Exploration**: Rovers could use boustrophedon patterns to systematically survey areas of interest, ensuring complete coverage when searching for geological samples or mapping terrain. However, due to energy constraints, informative paths are ideally optimized, and this results in paths that are sparser than complete coverage sampling, and yet may still produce high-accuracy reconstructions. 
+- **Space Exploration**: Rovers could use boustrophedon patterns to systematically survey areas of interest, ensuring complete coverage when searching for geological samples or mapping terrain. However, due to energy constraints, informative paths are usually optimized, and this results in paths that are sparser than complete coverage sampling, and yet may still produce high-accuracy reconstructions. 
   
 - **Earth Observation**: Aerial vehicles employ these patterns for:
   - Agricultural monitoring and precision farming
