@@ -1,55 +1,14 @@
 # First-Order Boustrophedon Navigator
 ![image](https://github.com/user-attachments/assets/940fc6bc-fcee-4d11-8bc8-d53a650aaf80)
 
-In this assignment, you will understand the provided code in ROS2 with Turtlesim, and refactor and/or tune the navigator to implement a precise lawnmower survey (a boustrophedon pattern). The current code will do a pattern shown above, which is not a uniform lawnmower survey. 
-Explore literature on how lawnmower surveys typically look, and modify the code to meet the requirements for a uniform survey. 
-
-## Background
-Boustrophedon patterns (from Greek: "ox-turning", like an ox drawing a plow) are fundamental coverage survey trajectories useful in space exploration and Earth observation. These patterns are useful for:
-
-- **Space Exploration**: Rovers could use boustrophedon patterns to systematically survey areas of interest, ensuring complete coverage when searching for geological samples or mapping terrain. However, due to energy constraints, informative paths are usually optimized, and this results in paths that are sparser than complete coverage sampling, and may still produce high-accuracy reconstructions. 
-  
-- **Earth Observation**: Aerial vehicles employ these patterns for:
-  - Agricultural monitoring and precision farming
-  - Search and rescue operations
-  - Environmental mapping and monitoring
-  - Geological or archaeological surveys
-  
-- **Ocean Exploration**: Autonomous underwater vehicles (AUVs) use boustrophedon patterns to:
-  - Map the ocean floor
-  - Search for shipwrecks or aircraft debris
-  - Monitor marine ecosystems
-  
-The efficiency and accuracy of these surveys depend heavily on the robot's ability to follow the prescribed path with minimal deviation (cross-track error). This assignment simulates these real-world challenges in a 2D environment using a first-order dynamical system (the turtlesim robot).
-
-## Objective
-Tune a PD controller to make a first-order system execute the most precise boustrophedon pattern possible. The goal is to minimize the cross-track error while maintaining smooth motion.
+## Abstract
+In this assignment, I have tuned the provided code in ROS2 with Turtlesim, and refactor for the navigator to implement a precise lawnmower survey (a boustrophedon pattern) for the given critera.The goal was to minimize the cross-track error while maintaining smooth motion.
 
 ## Learning Outcomes
 - Understanding PD control parameters and their effects on first-order systems
 - Practical experience with controller tuning
 - Analysis of trajectory tracking performance
 - ROS2 visualization and debugging
-
-## Prerequisites
-
-### System Requirements
-Choose one of the following combinations:
-- Ubuntu 22.04 + ROS2 Humble
-- Ubuntu 23.04 + ROS2 Iron
-- Ubuntu 23.10 + ROS2 Iron
-- Ubuntu 24.04 + ROS2 Jazzy
-
-### Required Packages
-```bash
-sudo apt install ros-$ROS_DISTRO-turtlesim
-sudo apt install ros-$ROS_DISTRO-rqt*
-```
-
-### Python Dependencies
-```bash
-pip3 install numpy matplotlib
-```
 
 ## The Challenge
 
@@ -85,26 +44,6 @@ Provide a detailed analysis of your tuning process:
 - Challenges encountered and solutions
 - Comparison of different parameter sets
 
-## Getting Started
-
-### Repository Setup
-1. Fork the course repository:
-   - Visit: https://github.com/DREAMS-lab/RAS-SES-598-Space-Robotics-and-AI
-   - Click "Fork" in the top-right corner
-   - Select your GitHub account as the destination
-
-2. Clone your fork (outside of ros2_ws):
-```bash
-cd ~/
-git clone https://github.com/YOUR_USERNAME/RAS-SES-598-Space-Robotics-and-AI.git
-```
-
-3. Create a symlink to the assignment in your ROS2 workspace:
-```bash
-cd ~/ros2_ws/src
-ln -s ~/RAS-SES-598-Space-Robotics-and-AI/assignments/first_order_boustrophedon_navigator .
-```
-
 ### Building and Running
 1. Build the package:
 ```bash
@@ -137,15 +76,44 @@ Add these topics:
 - /turtle1/cmd_vel/angular/z
 - /cross_track_error
 
-## Evaluation Criteria
+## Analysis
+### Control Parameters
+- **Linear Velocity Control**:<br>
+kp_linear (Linear Proportional Gain): Determines how aggressively the robot moves toward the waypoint based on the distance error.<br>
+kd_linear (Linear Derivative Gain): Adds damping to prevent overshoot in linear motion.<br>
+*Adjustments:*
+  * kp_linear:
+    - **Increase** if the robot is too sluggish.
+    - **Decrease** if the robot overshoots or oscillates.
+  * kd_linear:
+    - **Increase** if the robot oscillates too much.
+    - **Decrease** if the robot reacts too slowly.
+- **Angular Velocity Control**:<br>
+kp_angular (Angular Proportional Gain): Determines how quickly the robot corrects its heading toward the waypoint.<br>
+kd_angular (Angular Derivative Gain): Adds damping to angular adjustments, preventing over-correction in turns.<br>
+*Adjustments:*
+  * kp_angular:
+    - **Increase** if the robot is too slow to align with the path.
+    - **Decrease** if the robot turns too sharply or oscillates.
+  * kd_angular:
+    - **Increase** if the robot overshoots while turning.
+    - **Decrease** if it’s too sluggish in aligning.
+- **Waypoint Spacing**:<br>
+Determines the distance between consecutive rows in the lawnmower pattern.<br>
+*Adjustments:*
+    - **Increase** if the robot struggles to make sharp turns between rows.
+    - **Decrease** to cover the area more thoroughly with minimal overlap.
+- **Velocity Limits**:<br>
+Linear Velocity (linear.x): The maximum speed of forward motion.<br>
+Angular Velocity (angular.z): The maximum rate of turning.<br>
 
-1. Controller Performance (60%)
-   - Average cross-track error < 0.2 units (25%)
-   - Maximum cross-track error < 0.5 units (15%)
-   - Smooth velocity profiles (10%)
-   - Clean cornering behavior (10%)
+## Final Parameter Values
 
-2. Pattern Quality (20%)
+### 1. Controller Performance
+   - Average cross-track error =
+   - Maximum cross-track error =
+
+### 2. Pattern Quality
    - Even spacing between lines
    - Complete coverage of target area
    - Efficient use of space
