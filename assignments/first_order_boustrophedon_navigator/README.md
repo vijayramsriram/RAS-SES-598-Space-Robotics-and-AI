@@ -10,7 +10,7 @@ In this assignment, I have tuned the provided code in ROS2 with Turtlesim, and r
 - Analysis of trajectory tracking performance
 - ROS2 visualization and debugging
 
-## Analysis
+## Discussion of tuning methodology
 ### Control Parameters
 - **Linear Velocity Control**:<br>
 kp_linear (Linear Proportional Gain): Determines how aggressively the robot moves toward the waypoint based on the distance error.<br>
@@ -41,7 +41,7 @@ Determines the distance between consecutive rows in the lawnmower pattern.<br>
 Linear Velocity (linear.x): The maximum speed of forward motion.<br>
 Angular Velocity (angular.z): The maximum rate of turning.<br>
 
-## Final Parameter Values
+## Final Parameter Values (Analysis)
 |  Iterations  | `kp_linear` | `kd_linear` | `kp_angular` | `kd_angular` | Spacing | Avg Cross-Track Error |
 |-------------|-------------|-------------|--------------|--------------|---------|-----------------------|
 |      1      | 9.0         | 0.06        | 7.8          | 0.018        | 0.6     | 0.094                 |
@@ -82,8 +82,22 @@ Angular Velocity (angular.z): The maximum rate of turning.<br>
    - **Final average cross-track error = 0.098** 
    - **Maximum cross-track error = 0.242**
 
+## Challenges and solutions
 
-This will demonstrate understanding of:
-- ROS2 message definitions
-- Custom interface creation
-- Message publishing patterns 
+### High Cross-Track Error
+ - Cause: The robot deviated significantly from the desired path due to improper control parameter tuning.
+ - Solution: Gradually tune Kp and Kd values for both linear and angular velocities. Perform systematic testing with different values and log the cross-track error to find an optimal configuration.
+### Oscillations in Movement
+ - Cause: Over-aggressive control gains (Kp and Kd) caused the robot to overshoot and oscillate around the path.
+ - Solution: Reduce the Kp gain to decrease sensitivity. Increase the Kd gain slightly to add damping, minimizing oscillations.
+### Abrupt or Jerky Movements
+ - Cause: High maximum linear or angular velocities caused the robot to move too aggressively.
+ - Solution: Limit the maximum linear and angular velocities to create a more controlled movement. Gradually test with smaller velocity values and observe the movement.
+### Uneven Coverage of the Area
+ - Cause: Poor waypoint generation or misaligned navigation caused gaps in coverage.
+ - Solution: Adjust the waypoint generation logic to ensure systematic coverage without overlaps or gaps. Use visualization tools to confirm the path's correctness.
+
+
+
+
+
