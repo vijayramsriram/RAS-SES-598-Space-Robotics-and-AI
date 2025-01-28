@@ -74,6 +74,13 @@ These metrics demonstrate that the robot consistently maintained low deviations 
 **2. Trajectory Plot**
 
 The trajectory plot visualizes the robot's path across the boustrophedon pattern. Each line segment corresponds to a row, with smooth transitions at the turning points.
+The upper and lower spike here represents the bot taking turns, if it takes a right turn the angular z plot spikes up, if the bot takes left turn the angular z plot spikes down.
+
+![Screenshot from 2025-01-27 19-38-58](https://github.com/user-attachments/assets/464dc751-765c-482c-989a-e276ec068cde)
+
+![Screenshot from 2025-01-27 19-41-16](https://github.com/user-attachments/assets/8a4bf5b8-41d9-4bb7-abc5-f8b7b2dfc381)
+
+
 
 **• Key Observations:** 
         ◦ Minimal overshooting at row endpoints. 
@@ -88,6 +95,7 @@ The velocity profiles for both linear and angular velocities show the robot's re
 **• Angular Velocity:** Sharp spikes at turning points, indicating tight cornering.
 
 ![image](https://github.com/user-attachments/assets/0d0af055-63d7-4b4a-af5b-70632913b4a6)
+
 
 
 **Discussion of Tuning Methodology**
