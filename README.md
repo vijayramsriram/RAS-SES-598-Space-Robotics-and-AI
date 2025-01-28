@@ -80,7 +80,9 @@ The upper and lower spike here represents the bot taking turns, if it takes a ri
 
 ![Screenshot from 2025-01-27 19-41-16](https://github.com/user-attachments/assets/8a4bf5b8-41d9-4bb7-abc5-f8b7b2dfc381)
 
+Here you can see the full graph.
 
+![image](https://github.com/user-attachments/assets/5f0e8d28-b4d6-4459-b2bd-0fd87d542a4d)
 
   
 **3. Velocity Profiles**
