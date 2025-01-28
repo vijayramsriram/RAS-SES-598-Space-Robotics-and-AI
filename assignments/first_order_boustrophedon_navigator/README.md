@@ -142,6 +142,10 @@ Any non-zero value introduced oscillatory damping effects, leading to wobbling d
 Monitored key topics such as `/turtle1/cmd_vel/linear/x` (linear velocity), `/turtle1/cmd_vel/angular/z` (angular velocity), and `/cross_track_error` (deviation from the desired path).  
 Observed real-time plots to identify trends like velocity overshoots, turning instability, and cross-track error reduction over time. 
 
+
+
+
+
 **Using `rqt_reconfigure`:**  
 
 Dynamically adjusted parameters during runtime, allowing immediate observation of how each change affected performance. This real-time feedback loop significantly accelerated the tuning process. 
