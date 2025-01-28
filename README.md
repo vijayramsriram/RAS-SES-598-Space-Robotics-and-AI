@@ -164,18 +164,21 @@ Trajectory plots were analyzed to verify that row-to-row spacing was uniform thr
 **Challenge: Overshooting at Row Endpoints**
 
 Problem Observed: The robot moved beyond the restricted area at the ends of rows before stopping. This led to overlapping into previously covered areas, reducing trajectory accuracy and creating inefficiencies in coverage.
+
 Solution:Reduction of Kp_linear: The proportional gain for linear velocity was reduced to prevent excessive acceleration that caused the overshooting. Lowering this value allowed the robot to maintain a controlled and steady approach toward the endpoints.
 Increase in Kd_linear: The derivative gain for linear velocity was increased to act as a braking factor, helping the robot decelerate smoothly as it approached the endpoints. This adjustment eliminated the overshooting behavior while maintaining precise stopping within the designated area.
 
 **Challenge: Wobbling During Turns**
 
 Problem Observed: The robot exhibited oscillatory motion or wobbling when transitioning between rows, especially during tight turns. This caused instability and delayed the completion of the turn.
+
 Solution:Setting Kd_angular to 0.0: The derivative term for angular velocity was causing over-damping and introduced oscillatory effects. By setting it to 0.0, the wobbling was completely eliminated, resulting in smooth and stable turns.
 Fine-Tuning of Kp_angular: The proportional gain for angular velocity was adjusted to achieve the optimal balance between curve tightness and stability. This ensured that the robot could execute precise turns without counteracting its own motion, avoiding both wide curves and oscillations.
 
 **Challenge: Uneven Spacing Between Rows**
 
 Problem Observed: The spacing between adjacent rows was inconsistent, leading to gaps or overlaps in the workspace coverage. This reduced the efficiency of the boustrophedon pattern.
+
 Solution:Adjustment of the spacing Parameter: The spacing parameter was carefully tuned to 1.0, ensuring even and consistent row-to-row coverage. This value provided a balance between avoiding redundant coverage (overlap) and ensuring no areas were left uncovered (gaps).
 Verification with Trajectory Plots: The trajectory was visually analyzed using performance plots to confirm that the spacing was uniform across the entire workspace.fied with trajectory plots.
 
