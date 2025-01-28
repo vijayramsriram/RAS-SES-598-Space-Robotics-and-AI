@@ -82,10 +82,7 @@ The upper and lower spike here represents the bot taking turns, if it takes a ri
 
 
 
-**• Key Observations:** 
-        ◦ Minimal overshooting at row endpoints. 
-        ◦ Tight turns with consistent spacing.
-   
+  
 **3. Velocity Profiles**
 
 The velocity profiles for both linear and angular velocities show the robot's responsiveness to the control inputs:
