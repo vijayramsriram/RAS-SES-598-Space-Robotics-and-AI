@@ -10,72 +10,6 @@ In this assignment, I have tuned the provided code in ROS2 with Turtlesim, and r
 - Analysis of trajectory tracking performance
 - ROS2 visualization and debugging
 
-## The Challenge
-
-### 1. Controller Tuning (60 points)
-Use rqt_reconfigure to tune the following PD controller parameters in real-time:
-```python
-# Controller parameters to tune
-self.Kp_linear = 1.0   # Proportional gain for linear velocity
-self.Kd_linear = 0.1   # Derivative gain for linear velocity
-self.Kp_angular = 1.0  # Proportional gain for angular velocity
-self.Kd_angular = 0.1  # Derivative gain for angular velocity
-```
-
-Performance Metrics:
-- Average cross-track error (25 points)
-- Maximum cross-track error (15 points)
-- Smoothness of motion (10 points)
-- Cornering performance (10 points)
-
-### 2. Pattern Parameters (20 points)
-Optimize the boustrophedon pattern parameters:
-```python
-# Pattern parameters to tune
-self.spacing = 1.0     # Spacing between lines
-```
-- Coverage efficiency (10 points)
-- Pattern completeness (10 points)
-
-### 3. Analysis and Documentation (20 points)
-Provide a detailed analysis of your tuning process:
-- Methodology used for tuning
-- Performance plots and metrics
-- Challenges encountered and solutions
-- Comparison of different parameter sets
-
-### Building and Running
-1. Build the package:
-```bash
-cd ~/ros2_ws
-colcon build --packages-select first_order_boustrophedon_navigator
-source install/setup.bash
-```
-
-2. Launch the demo:
-```bash
-ros2 launch first_order_boustrophedon_navigator boustrophedon.launch.py
-```
-
-3. Monitor performance:
-```bash
-# View cross-track error as a number
-ros2 topic echo /cross_track_error
-
-# Or view detailed statistics in the launch terminal
-```
-
-4. Visualize trajectory and performance:
-```bash
-ros2 run rqt_plot rqt_plot
-```
-Add these topics:
-- /turtle1/pose/x
-- /turtle1/pose/y
-- /turtle1/cmd_vel/linear/x
-- /turtle1/cmd_vel/angular/z
-- /cross_track_error
-
 ## Analysis
 ### Control Parameters
 - **Linear Velocity Control**:<br>
@@ -108,67 +42,46 @@ Linear Velocity (linear.x): The maximum speed of forward motion.<br>
 Angular Velocity (angular.z): The maximum rate of turning.<br>
 
 ## Final Parameter Values
+|  Iterations  | `kp_linear` | `kd_linear` | `kp_angular` | `kd_angular` | Spacing | Avg Cross-Track Error |
+|-------------|-------------|-------------|--------------|--------------|---------|-----------------------|
+|      1      | 9.0         | 0.06        | 7.8          | 0.018        | 0.6     | 0.094                 |
+|      2      | 9.0         | 0.06        | 7.7          | 0.018        | 0.5     | 0.098                 |
+|      3      | 9.0         | 0.06        | 7.6          | 0.019        | 0.4     | 0.104                 |
+|      4      | 9.0         | 0.065       | 8.7          | 0.018        | 0.3     | 0.078                 |
+|      5      | 8.4         | 0.065       | 8.2          | 0.022        | 0.3     | 0.101                 |
+|      6      | 8.4         | 0.07        | 8.0          | 0.025        | 0.3     | 0.095                 |
+|      7      | 8.2         | 0.07        | 7.9          | 0.028        | 0.3     | 0.089                 |
+|      8      | 8.0         | 0.07        | 8.0          | 0.034        | 0.3     | 0.098                 |
 
-### 1. Controller Performance
-   - Average cross-track error =
-   - Maximum cross-track error =
+## Outputs
 
-### 2. Pattern Quality
-   - Even spacing between lines
-   - Complete coverage of target area
-   - Efficient use of space
+### Iterations 1 to 8 
+<div style="max-width: 100%; overflow-x: auto; white-space: nowrap; padding: 10px;">
 
-3. Documentation (20%)
-   - Clear explanation of tuning process
-   - Well-presented performance metrics
-   - Thoughtful analysis of results
+  <div style="display: inline-block; text-align: center; margin-right: 20px;">   
+    <img src="https://github.com/user-attachments/assets/f649fc59-758b-4aad-8d92-1fb81592fc7e" alt="Topic 1" width="225" /> <img src="https://github.com/user-attachments/assets/146c4dc0-8493-4d44-86f0-d845fc02cfbb" alt="Topic 2" width="225" />  <img src="https://github.com/user-attachments/assets/18638419-1628-4346-9f8b-e977dcb2905c" alt="Topic 3" width="225" />  <img src="https://github.com/user-attachments/assets/af56ffc8-a98c-472a-9d60-7a0a9ce0527c" alt="Topic 4" width="225" />  
+  </div>
 
-## Submission Requirements
+  <div style="display: inline-block; text-align: center; margin-right: 20px;">
+    <img src="https://github.com/user-attachments/assets/886e9c2e-33df-41d9-a98d-e8e1dd4d32ac" alt="Topic 5" width="225" />  <img src="https://github.com/user-attachments/assets/3c75a9c0-26b4-44b1-b5f1-545b3a880fa0" alt="Topic 6" width="225" />  <img src="https://github.com/user-attachments/assets/3fc9a753-656c-4f5d-9197-3d1ec63de82b" alt="Topic 7" width="225" />  <img src="https://github.com/user-attachments/assets/39de7f57-6d58-4ecb-8b2f-83f6cc4b58f2" alt="Topic 8" width="225" />
+  </div>
 
-1. GitHub Repository:
-   - Commit messages should be descriptive
+### Best Result (Iteration -8)
+<div style="max-width: 100%; overflow-x: auto; white-space: nowrap; padding: 10px;">
 
-2. Documentation in Repository:
-   - Update the README.md in your fork with:
-     - Final parameter values with justification
-     - Performance metrics and analysis
-     - Plots showing:
-       - Cross-track error over time
-       - Trajectory plot
-       - Velocity profiles
-     - Discussion of tuning methodology
-     - Challenges and solutions
+  <div style="display: inline-block; text-align: center; margin-right: 20px;">   
+    <img src="https://github.com/user-attachments/assets/39de7f57-6d58-4ecb-8b2f-83f6cc4b58f2" alt="Topic 8" width="500" />
+  </div>
+<div style="display: inline-block; text-align: center; margin-right: 20px;">   
+    <img src="https://github.com/user-attachments/assets/573d3163-76a2-4717-9054-4f8b82b9d9e7" alt="Topic 8" width="500" />
+  </div>
+  <div style="display: inline-block; text-align: center; margin-right: 20px;">   
+    <img src="https://github.com/user-attachments/assets/ff75e5f2-4c64-4ff5-b2e9-17b62d78a0c7" alt="Topic 8" width="1000" /> 
+  </div>
+  
+   - **Final average cross-track error = 0.098** 
+   - **Maximum cross-track error = 0.242**
 
-3. Submit your work:
-   - Submit the URL of your GitHub repository
-   - Ensure your repository is public
-   - Final commit should be before the deadline
-
-## Tips for Success
-- Start with low gains and increase gradually
-- Test one parameter at a time
-- Pay attention to both straight-line tracking and cornering
-- Use rqt_plot to visualize performance in real-time
-- Consider the trade-off between speed and accuracy
-
-## Grading Rubric
-- Perfect tracking (cross-track error < 0.2 units): 100%
-- Good tracking (cross-track error < 0.5 units): 90%
-- Acceptable tracking (cross-track error < 0.8 units): 80%
-- Poor tracking (cross-track error > 0.8 units): 60% or lower
-
-Note: Final grade will also consider documentation quality and analysis depth.
-
-## Extra Credit (10 points)
-Create and implement a custom ROS2 message type to publish detailed performance metrics:
-- Define a custom message type with fields for:
-  - Cross-track error
-  - Current velocity
-  - Distance to next waypoint
-  - Completion percentage
-  - Other relevant metrics
-- Implement the message publisher in your node
-- Document the message structure and usage
 
 This will demonstrate understanding of:
 - ROS2 message definitions
