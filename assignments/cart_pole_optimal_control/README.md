@@ -10,9 +10,9 @@ The performance of the system depends heavily on the values of the **state cost 
 
 ### **2. LQR Cost Matrices:**
 In the LQR controller, the following cost function is minimized:
-$
+$$
 J = \int_0^\infty \left( x^T Q x + u^T R u \right) dt
-$
+$$
 Where:
 - \( x \) is the state vector of the system (cart position, cart velocity, pole angle, pole angular velocity),
 - \( u \) is the control input (force applied to the cart),
@@ -21,23 +21,23 @@ Where:
 
 #### **Default Parameters**:
 - **State cost matrix (`Q`)**: 
-$
+$$
 Q = \text{diag}(1.0, 1.0, 10.0, 10.0)
-$
+$$
 - **Control cost matrix (`R`)**: 
-$
+$$
 R = 0.1
-$
+$$
 
 #### **Modified Parameters** (Your input):
 - **State cost matrix (`Q`)**: 
-$
+$$
 Q = {diag}(1.0, 1.0, 50.0, 50.0)
-$
+$$
 - **Control cost matrix (`R`)**: 
-$
+$$
 R = 0.01
-$
+$$
 
 ### **3. Performance with Default Parameters**:
 
