@@ -6,6 +6,7 @@ from std_msgs.msg import Float64
 from sensor_msgs.msg import JointState
 import numpy as np
 from scipy import linalg
+import time
 
 class CartPoleLQRController(Node):
     def __init__(self):
@@ -33,8 +34,8 @@ class CartPoleLQRController(Node):
         ])
         
         # LQR cost matrices
-        self.Q = np.diag([1.0, 1.0, 10.0, 10.0])  # State cost
-        self.R = np.array([[0.1]])  # Control cost
+        self.Q = np.diag([1.0, 1.0, 50.0, 50.0])  # State cost
+        self.R = np.array([[0.01]])  # Control cost
         
         # Compute LQR gain matrix
         self.K = self.compute_lqr_gain()
@@ -46,16 +47,23 @@ class CartPoleLQRController(Node):
         self.last_control = 0.0
         self.control_count = 0
         
+        # Tracking statistics
+        self.max_pole_angle_deviation = 0.0
+        self.cart_position_errors = []
+        self.peak_control_force = 0.0
+        
+        # Recovery time tracking
+        self.disturbance_detected = False
+        self.recovery_start_time = None
+        self.recovery_time = None
+        self.disturbance_threshold = 0.05  # Threshold for disturbance detection
+        
         # Create publishers and subscribers
         self.cart_cmd_pub = self.create_publisher(
             Float64, 
             '/model/cart_pole/joint/cart_to_base/cmd_force', 
             10
         )
-        
-        # Verify publisher created successfully
-        if self.cart_cmd_pub:
-            self.get_logger().info('Force command publisher created successfully')
         
         self.joint_state_sub = self.create_subscription(
             JointState,
@@ -90,6 +98,24 @@ class CartPoleLQRController(Node):
                 [msg.velocity[pole_idx]]      # Pole angular velocity (θ̇)
             ])
             
+            # Track max pole angle deviation
+            self.max_pole_angle_deviation = max(self.max_pole_angle_deviation, abs(self.x[2, 0]))
+            
+            # Track cart position errors
+            self.cart_position_errors.append(self.x[0, 0] ** 2)
+            
+            # Detect disturbances
+            if abs(self.x[2, 0]) > self.disturbance_threshold and not self.disturbance_detected:
+                self.disturbance_detected = True
+                self.recovery_start_time = time.time()
+                self.get_logger().info(f'Disturbance detected! Pole angle: {self.x[2, 0]:.3f} rad')
+            
+            # Check if system has recovered
+            if self.disturbance_detected and abs(self.x[2, 0]) < self.disturbance_threshold:
+                self.recovery_time = time.time() - self.recovery_start_time
+                self.disturbance_detected = False
+                self.get_logger().info(f'Recovery complete! Time taken: {self.recovery_time:.3f} sec')
+
             if not self.state_initialized:
                 self.get_logger().info(f'Initial state: cart_pos={msg.position[cart_idx]:.3f}, cart_vel={msg.velocity[cart_idx]:.3f}, pole_angle={msg.position[pole_idx]:.3f}, pole_vel={msg.velocity[pole_idx]:.3f}')
                 self.state_initialized = True
@@ -108,9 +134,22 @@ class CartPoleLQRController(Node):
             u = -self.K @ self.x
             force = float(u[0])
             
-            # Log control input periodically
+            # Track peak control force
+            self.peak_control_force = max(self.peak_control_force, abs(force))
+            
+            # Compute RMS cart position error
+            rms_cart_position_error = np.sqrt(np.mean(self.cart_position_errors)) if self.cart_position_errors else 0.0
+            
+            # Log control input and statistics periodically
             if abs(force - self.last_control) > 0.1 or self.control_count % 100 == 0:
                 self.get_logger().info(f'State: {self.x.T}, Control force: {force:.3f}N')
+                self.get_logger().info(f'Max Pole Angle Deviation: {self.max_pole_angle_deviation:.3f} rad')
+                self.get_logger().info(f'RMS Cart Position Error: {rms_cart_position_error:.3f} m')
+                self.get_logger().info(f'Peak Control Force Used: {self.peak_control_force:.3f} N')
+
+                if self.recovery_time is not None:
+                    self.get_logger().info(f'Last Recovery Time: {self.recovery_time:.3f} sec')
+                    self.recovery_time = None  # Reset after logging
             
             # Publish control command
             msg = Float64()
@@ -131,4 +170,4 @@ def main(args=None):
     rclpy.shutdown()
 
 if __name__ == '__main__':
-    main() 
+    main()
