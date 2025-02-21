@@ -1,6 +1,5 @@
 # Cart-Pole Optimal Control Assignment
 
-[Watch the demo video](https://drive.google.com/file/d/1UEo88tqG-vV_pkRSoBF_-FWAlsZOLoIb/view?usp=sharing)
 ![image](https://github.com/user-attachments/assets/c8591475-3676-4cdf-8b4a-6539e5a2325f)
 
 ## Overview
@@ -23,43 +22,7 @@ The system includes an earthquake force generator that introduces external distu
 - Random variations in amplitude and phase
 - Additional Gaussian noise
 
-## Assignment Objectives
-
-### Core Requirements
-1. Analyze and tune the provided LQR controller to:
-   - Maintain the pendulum in an upright position
-   - Keep the cart within its ±2.5m physical limits
-   - Achieve stable operation under earthquake disturbances
-2. Document your LQR tuning approach:
-   - Analysis of the existing Q and R matrices
-   - Justification for any tuning changes made
-   - Analysis of performance trade-offs
-   - Experimental results and observations
-3. Analyze system performance:
-   - Duration of stable operation
-   - Maximum cart displacement
-   - Pendulum angle deviation
-   - Control effort analysis
-
-### Learning Outcomes
-- Understanding of LQR control parameters and their effects
-- Experience with competing control objectives
-- Analysis of system behavior under disturbances
-- Practical experience with ROS2 and Gazebo simulation
-
-### Extra Credit Options
-Students can implement reinforcement learning for extra credit (up to 30 points):
-
-1. Reinforcement Learning Implementation:
-   - Implement a basic DQN (Deep Q-Network) controller
-   - Train the agent to stabilize the pendulum
-   - Compare performance with the LQR controller
-   - Document training process and results
-   - Create training progress visualizations
-   - Analyze and compare performance with LQR
-
-## Implementation
-
+---
 ### Controller Description
 The package includes a complete LQR controller implementation (`lqr_controller.py`) with the following features:
 - State feedback control
@@ -88,74 +51,86 @@ The earthquake generator (`earthquake_force_generator.py`) provides realistic di
   }]
   ```
 
-## Getting Started
+# **Effects of Parameter Changes in the Cart-Pole LQR Controller**
+---
+## **Changing LQR Cost Matrices (`Q` and `R`)**
 
-### Prerequisites
-- ROS2 Humble or Jazzy
-- Gazebo Garden
-- Python 3.8+
-- Required Python packages: numpy, scipy
+### **a) Changing `Q` (State Cost Matrix)**  
+- **Increasing `Q[0,0]` (penalizing cart position more)**  
+  - The system keeps the cart near the center.
+  - May lead to stronger corrections and oscillations.
 
-#### Installation Commands
-```bash
-# Set ROS_DISTRO as per your configuration
-export ROS_DISTRO=humble
+- **Increasing `Q[2,2]` (penalizing pole angle more)**  
+  - Prioritizes keeping the pole upright.
+  - May cause larger cart movements.
 
-# Install ROS2 packages
-sudo apt update
-sudo apt install -y \
-    ros-$ROS_DISTRO-ros-gz-bridge \
-    ros-$ROS_DISTRO-ros-gz-sim \
-    ros-$ROS_DISTRO-ros-gz-interfaces \
-    ros-$ROS_DISTRO-robot-state-publisher \
-    ros-$ROS_DISTRO-rviz2
+- **Increasing all diagonal values**  
+  - The controller becomes **aggressive**, reducing errors.
+  - High values may lead to **instability**.
 
-# Install Python dependencies
-pip3 install numpy scipy control
-```
+- **Decreasing `Q` values**  
+  - The controller becomes **more relaxed**, leading to **smoother but slower** stabilization.
 
-### Repository Setup
+---
 
-#### If you already have a fork of the course repository:
-```bash
-# Navigate to your local copy of the repository
-cd ~/RAS-SES-598-Space-Robotics-and-AI
+### **b) Changing `R` (Control Cost Matrix)**  
+- **Increasing `R` (penalizing control force more)**  
+  - The controller applies **smaller forces**.
+  - The system is **more stable but slower**.
+  - If too high, the controller may **fail to balance** the pole.
 
-# Add the original repository as upstream (if not already done)
-git remote add upstream https://github.com/DREAMS-lab/RAS-SES-598-Space-Robotics-and-AI.git
+- **Decreasing `R` (allowing larger control forces)**  
+  - The controller applies **stronger forces**.
+  - The system stabilizes **faster** but may **oscillate more**.
+  - **Increases energy consumption**.
 
-# Fetch the latest changes from upstream
-git fetch upstream
+---
+### Performance Metrics
+---
+## Final Parameter Values (Analysis)
+|  Iteration no.  | Q values | R value |
+|-------------|-------------|-------------|
+|      1      | [1.0, 1.0, 10.0, 10.0]      | [0.1] |
 
-# Checkout your main branch
-git checkout main
+https://github.com/user-attachments/assets/4313e80e-10ae-46d3-93ca-fceafa46113c
 
-# Merge upstream changes
-git merge upstream/main
+<br>
 
-# Push the updates to your fork
-git push origin main
-```
+|  Iteration no. | Q values | R value |
+|-------------|-------------|-------------|
+|      2      | [2.0, 5.0, 20.0, 30.0]      | [0.4] |
 
-#### If you don't have a fork yet:
-1. Fork the course repository:
-   - Visit: https://github.com/DREAMS-lab/RAS-SES-598-Space-Robotics-and-AI
-   - Click "Fork" in the top-right corner
-   - Select your GitHub account as the destination
+https://github.com/user-attachments/assets/16a96183-7fb1-44dc-aea7-76a49998984c
 
-2. Clone your fork:
-```bash
-cd ~/
-git clone https://github.com/YOUR_USERNAME/RAS-SES-598-Space-Robotics-and-AI.git
-```
+<br>
 
-### Create Symlink to ROS2 Workspace
-```bash
-# Create symlink in your ROS2 workspace
-cd ~/ros2_ws/src
-ln -s ~/RAS-SES-598-Space-Robotics-and-AI/assignments/cart_pole_optimal_control .
-```
+|  Iteration no. | Q values | R value |
+|-------------|-------------|-------------|
+|      3      | [6.0, 7.0, 10.0, 10.0]      | [0.15]|
 
+
+https://github.com/user-attachments/assets/d98e3995-0b2c-4484-aa24-d449905045b6
+
+<br>
+
+|  Iteration no. | Q values | R value |
+|-------------|-------------|-------------|
+|      4      | [6.0, 7.0, 5.0, 10.0]      | [0.2] |
+
+https://github.com/user-attachments/assets/1f233238-dd33-4e8c-96b1-f93ba1dc7b5b
+
+<br>
+
+|  Iteration no. | Q values | R value |
+|-------------|-------------|-------------|
+|      5      | [6.0, 7.0, 5.0, 4.0]       | [0.05]|
+
+
+https://github.com/user-attachments/assets/7d00e0c4-e647-4265-aca8-4fce5c885ec8
+
+<br>
+
+---
 ### Building and Running
 ```bash
 # Build the package
@@ -168,20 +143,6 @@ source install/setup.bash
 # Launch the simulation with visualization
 ros2 launch cart_pole_optimal_control cart_pole_rviz.launch.py
 ```
-
-This will start:
-- Gazebo simulation (headless mode)
-- RViz visualization showing:
-  * Cart-pole system
-  * Force arrows (control and disturbance forces)
-  * TF frames for system state
-- LQR controller
-- Earthquake force generator
-- Force visualizer
-
-### Visualization Features
-The RViz view provides a side perspective of the cart-pole system with:
-
 #### Force Arrows
 Two types of forces are visualized:
 1. Control Forces (at cart level):
@@ -194,73 +155,19 @@ Two types of forces are visualized:
 
 Arrow lengths are proportional to force magnitudes.
 
-## Analysis Requirements
+### **Conclusion**
 
-### Performance Metrics
-Students should analyze:
-1. Stability Metrics:
-   - Maximum pole angle deviation
-   - RMS cart position error
-   - Peak control force used
-   - Recovery time after disturbances
+The **Cart-Pole LQR Controller** effectively demonstrates how Linear Quadratic Regulator (LQR) control can stabilize an inherently unstable system. By continuously estimating the system state and applying optimal control forces, the controller ensures the pole remains upright while minimizing unnecessary cart movement.
 
-2. System Constraints:
-   - Cart position limit: ±2.5m
-   - Control rate: 50Hz
-   - Pole angle stability
-   - Control effort efficiency
+This implementation highlights key aspects of control engineering, such as:
 
-### Analysis Guidelines
-1. Baseline Performance:
-   - Document system behavior with default parameters
-   - Identify key performance bottlenecks
-   - Analyze disturbance effects
+- The impact of **system parameters** (mass, length, gravity) on dynamics.
+- The role of **LQR cost matrices** in balancing precision and control effort.
+- The importance of **timing and frequency** in real-time control.
+- The ability to **track disturbances and recovery** for robust performance.
 
-2. Parameter Effects:
-   - Analyze how Q matrix weights affect different states
-   - Study R value's impact on control aggressiveness
-   - Document trade-offs between objectives
+By tuning these parameters appropriately, this controller can be adapted to different cart-pole setups or extended to more complex robotic systems. Future improvements could include adaptive control, reinforcement learning-based policies, or model predictive control (MPC) for enhanced robustness. 🚀
 
-3. Disturbance Response:
-   - Characterize system response to different disturbance frequencies
-   - Analyze recovery behavior
-   - Study control effort distribution
-
-## Evaluation Criteria
-### Core Assignment (100 points)
-1. Analysis Quality (40 points)
-   - Depth of parameter analysis
-   - Quality of performance metrics
-   - Understanding of system behavior
-
-2. Performance Results (30 points)
-   - Stability under disturbances
-   - Constraint satisfaction
-   - Control efficiency
-
-3. Documentation (30 points)
-   - Clear analysis presentation
-   - Quality of data and plots
-   - Thoroughness of discussion
-
-### Extra Credit (up to 30 points)
-- Reinforcement Learning Implementation (30 points)
-
-## Tips for Success
-1. Start with understanding the existing controller behavior
-2. Document baseline performance thoroughly
-3. Make systematic parameter adjustments
-4. Keep detailed records of all tests
-5. Focus on understanding trade-offs
-6. Use visualizations effectively
-
-## Submission Requirements
-1. Technical report including:
-   - Analysis of controller behavior
-   - Performance data and plots
-   - Discussion of findings
-2. Video demonstration of system performance
-3. Any additional analysis tools or visualizations created
 
 ## License
 This work is licensed under a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
