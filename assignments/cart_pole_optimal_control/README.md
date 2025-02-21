@@ -136,6 +136,14 @@ To evaluate the robustness of the LQR controller, we introduced disturbances at 
 - The modified LQR **applies higher initial forces**, distributing control effort more efficiently over time, leading to smoother stabilization.
 
 
+| **Metric**               | **Default Parameters**                       | **Modified Parameters**                    |
+|--------------------------|---------------------------------|---------------------------------|
+| **Max Pole Angle Deviation** | 1.706 rad                          | 0.036 rad                         |
+| **RMS Cart Position Error**  | 0.940 m                            | 0.053 m                           |
+| **Initial Control Force**    | 1.517 N                            | 48.875 N                         |
+| **Peak Control Force**       | 301.772 N                          | 55.210 N                         |
+| **Pole Stability**           | Falls over time                     | Stays upright indefinitely        |
+| **Control Strategy**         | Weak corrections, late response     | Strong corrections, early response |
 
 
 
