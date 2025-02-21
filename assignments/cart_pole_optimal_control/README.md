@@ -1,267 +1,112 @@
-# Cart-Pole Optimal Control Assignment
+### Cart-Pole System Performance Analysis with Different LQR Cost Matrices
 
-[Watch the demo video](https://drive.google.com/file/d/1UEo88tqG-vV_pkRSoBF_-FWAlsZOLoIb/view?usp=sharing)
-![image](https://github.com/user-attachments/assets/c8591475-3676-4cdf-8b4a-6539e5a2325f)
+#### Objective:
+The goal of this report is to analyze the behavior of a cart-pole system under different **Linear Quadratic Regulator (LQR)** cost matrices. We will compare two sets of cost matrices and examine the system's stability and control force usage.
 
-## Overview
-This assignment challenges students to tune and analyze an LQR controller for a cart-pole system subject to earthquake disturbances. The goal is to maintain the pole's stability while keeping the cart within its physical constraints under external perturbations. The earthquake force generator in this assignment introduces students to simulating and controlling systems under seismic disturbances, which connects to the Virtual Shake Robot covered later in the course. The skills developed here in handling dynamic disturbances and maintaining system stability will be useful for optimal control of space robots, such as Lunar landers or orbital debris removal robots.
+### **1. Introduction:**
+The **cart-pole system** consists of a cart that moves horizontally on a track, with a pole mounted on top. The task is to keep the pole balanced upright by controlling the horizontal position of the cart. The system is controlled by an **LQR controller**, which minimizes a quadratic cost function.
 
-## System Description
-The assignment is based on the problem formalism here: https://underactuated.mit.edu/acrobot.html#cart_pole
-### Physical Setup
-- Inverted pendulum mounted on a cart
-- Cart traversal range: ±2.5m (total range: 5m)
-- Pole length: 1m
-- Cart mass: 1.0 kg
-- Pole mass: 1.0 kg
+The performance of the system depends heavily on the values of the **state cost matrix (Q)** and the **control cost matrix (R)** used in the LQR controller.
 
-### Disturbance Generator
-The system includes an earthquake force generator that introduces external disturbances:
-- Generates continuous, earthquake-like forces using superposition of sine waves
-- Base amplitude: 15.0N (default setting)
-- Frequency range: 0.5-4.0 Hz (default setting)
-- Random variations in amplitude and phase
-- Additional Gaussian noise
+### **2. LQR Cost Matrices:**
+In the LQR controller, the following cost function is minimized:
+\[
+J = \int_0^\infty \left( x^T Q x + u^T R u \right) dt
+\]
+Where:
+- \( x \) is the state vector of the system (cart position, cart velocity, pole angle, pole angular velocity),
+- \( u \) is the control input (force applied to the cart),
+- \( Q \) is the state cost matrix, and
+- \( R \) is the control cost matrix.
 
-## Assignment Objectives
+#### **Default Parameters**:
+- **State cost matrix (`Q`)**: 
+\[
+Q = \text{diag}(1.0, 1.0, 10.0, 10.0)
+\]
+- **Control cost matrix (`R`)**: 
+\[
+R = 0.1
+\]
 
-### Core Requirements
-1. Analyze and tune the provided LQR controller to:
-   - Maintain the pendulum in an upright position
-   - Keep the cart within its ±2.5m physical limits
-   - Achieve stable operation under earthquake disturbances
-2. Document your LQR tuning approach:
-   - Analysis of the existing Q and R matrices
-   - Justification for any tuning changes made
-   - Analysis of performance trade-offs
-   - Experimental results and observations
-3. Analyze system performance:
-   - Duration of stable operation
-   - Maximum cart displacement
-   - Pendulum angle deviation
-   - Control effort analysis
+#### **Modified Parameters** (Your input):
+- **State cost matrix (`Q`)**: 
+\[
+Q = \text{diag}(1.0, 1.0, 50.0, 50.0)
+\]
+- **Control cost matrix (`R`)**: 
+\[
+R = 0.01
+\]
 
-### Learning Outcomes
-- Understanding of LQR control parameters and their effects
-- Experience with competing control objectives
-- Analysis of system behavior under disturbances
-- Practical experience with ROS2 and Gazebo simulation
+### **3. Performance with Default Parameters**:
 
-### Extra Credit Options
-Students can implement reinforcement learning for extra credit (up to 30 points):
+- **Initial Condition**: At the beginning, the pole's deviation from the upright position is small, with the **max pole angle deviation** being 0.047 radians. The **RMS cart position error** is 0.136 m, and the system applies an initial control force of 1.517 N.
 
-1. Reinforcement Learning Implementation:
-   - Implement a basic DQN (Deep Q-Network) controller
-   - Train the agent to stabilize the pendulum
-   - Compare performance with the LQR controller
-   - Document training process and results
-   - Create training progress visualizations
-   - Analyze and compare performance with LQR
+- **Midway Through Operation**: As the system continues to run, the **cart position error** increases to 0.758 m, and the **peak control force** rises to 26.436 N. This indicates that the system is struggling to stabilize the pole. The control force is not sufficient to keep the pole balanced, and the pole’s **max angle deviation** increases to 1.706 radians.
 
-## Implementation
+- **Final Stage (Pole Falling)**: Eventually, the pole falls as the **control force** spikes to 301.772 N, far beyond what is typically necessary to stabilize the system. The **max pole angle deviation** reaches 1.706 radians, and the **RMS cart position error** becomes 0.940 m, signaling the failure of the control system to stabilize the pole.
 
-### Controller Description
-The package includes a complete LQR controller implementation (`lqr_controller.py`) with the following features:
-- State feedback control
-- Configurable Q and R matrices
-- Real-time force command generation
-- State estimation and processing
-
-Current default parameters:
-```python
-# State cost matrix Q (default values)
-Q = np.diag([1.0, 1.0, 10.0, 10.0])  # [x, x_dot, theta, theta_dot]
-
-# Control cost R (default value)
-R = np.array([[0.1]])  # Control effort cost
+The terminal log from the default parameters shows the following output:
+```
+[lqr_controller-7] [INFO] [1740034445.621724473] [lqr_controller]: Max Pole Angle Deviation: 0.047 rad
+[lqr_controller-7] [INFO] [1740034445.621949379] [lqr_controller]: RMS Cart Position Error: 0.136 m
+[lqr_controller-7] [INFO] [1740034445.622176123] [lqr_controller]: Peak Control Force Used: 14.420 N
+...
+[lqr_controller-7] [INFO] [1740034471.242496170] [lqr_controller]: Max Pole Angle Deviation: 1.706 rad
+[lqr_controller-7] [INFO] [1740034471.242963200] [lqr_controller]: Peak Control Force Used: 301.772 N
 ```
 
-### Earthquake Disturbance
-The earthquake generator (`earthquake_force_generator.py`) provides realistic disturbances:
-- Configurable through ROS2 parameters
-- Default settings:
-  ```python
-  parameters=[{
-      'base_amplitude': 15.0,    # Strong force amplitude (N)
-      'frequency_range': [0.5, 4.0],  # Wide frequency range (Hz)
-      'update_rate': 50.0  # Update rate (Hz)
-  }]
-  ```
+### **4. Performance with Modified Parameters (Your input)**:
 
-## Getting Started
+With the new **LQR cost matrices**:
+- **State cost matrix (`Q`)**: 
+\[
+Q = \text{diag}(1.0, 1.0, 50.0, 50.0)
+\]
+- **Control cost matrix (`R`)**: 
+\[
+R = 0.01
+\]
 
-### Prerequisites
-- ROS2 Humble or Jazzy
-- Gazebo Garden
-- Python 3.8+
-- Required Python packages: numpy, scipy
+The system becomes much more stable:
 
-#### Installation Commands
-```bash
-# Set ROS_DISTRO as per your configuration
-export ROS_DISTRO=humble
+- **Initial Condition**: The **max pole angle deviation** is reduced to 0.036 radians, and the **RMS cart position error** is reduced to 0.053 m. The control force is initially higher (**48.875 N**), which allows the system to make stronger corrections.
 
-# Install ROS2 packages
-sudo apt update
-sudo apt install -y \
-    ros-$ROS_DISTRO-ros-gz-bridge \
-    ros-$ROS_DISTRO-ros-gz-sim \
-    ros-$ROS_DISTRO-ros-gz-interfaces \
-    ros-$ROS_DISTRO-robot-state-publisher \
-    ros-$ROS_DISTRO-rviz2
+- **Midway Through Operation**: The **RMS cart position error** stays around 0.053 m, and the **max pole angle deviation** remains low at **0.049 rad**. The **peak control force** increases to 55.210 N, but the system does not experience instability. The pole stays upright and is successfully balanced.
 
-# Install Python dependencies
-pip3 install numpy scipy control
+- **Final Stage (Pole Upright Indefinitely)**: The pole continues to stay upright, and the system maintains stable performance, with the **control force** being used to a manageable level. The pole does not fall, and the cart position error remains small.
+
+The terminal log from the modified parameters shows:
+```
+[lqr_controller-7] [INFO] [1740036272.188791386] [lqr_controller]: RMS Cart Position Error: 0.053 m
+[lqr_controller-7] [INFO] [1740036272.189026876] [lqr_controller]: Peak Control Force Used: 48.875 N
+...
+[lqr_controller-7] [INFO] [1740036826.465840687] [lqr_controller]: State: [[ 0.01588653  0.08279201 -0.03615926 -0.04823479]], Control force: -14.760N
+[lqr_controller-7] [INFO] [1740036826.466356983] [lqr_controller]: RMS Cart Position Error: 0.053 m
+[lqr_controller-7] [INFO] [1740036826.476755903] [lqr_controller]: Peak Control Force Used: 55.210 N
 ```
 
-### Repository Setup
+### **5. Analysis of Results:**
 
-#### If you already have a fork of the course repository:
-```bash
-# Navigate to your local copy of the repository
-cd ~/RAS-SES-598-Space-Robotics-and-AI
+#### **Comparison of Control Behavior**:
+1. **Default Parameters**:
+   - **Pole Angle Deviation**: Starts at **0.047 rad** and increases to **1.706 rad**, indicating the system is unable to keep the pole upright as the control force is insufficient.
+   - **Cart Position Error**: The error increases significantly, indicating instability in the cart’s movement as the pole falls.
+   - **Control Force**: Starts at 1.517 N but escalates to over **301 N** in an attempt to stabilize the system, which is not enough to prevent failure.
 
-# Add the original repository as upstream (if not already done)
-git remote add upstream https://github.com/DREAMS-lab/RAS-SES-598-Space-Robotics-and-AI.git
+2. **Modified Parameters**:
+   - **Pole Angle Deviation**: Remains at **0.036 rad** and stays close to this value, indicating the pole remains balanced.
+   - **Cart Position Error**: Stays around **0.053 m**, showing better control over the cart's horizontal position.
+   - **Control Force**: Initially higher (**48.875 N**) but remains within a manageable range, allowing the system to stabilize and keep the pole upright indefinitely.
 
-# Fetch the latest changes from upstream
-git fetch upstream
+#### **Why the Parameters Affect Stability**:
+- **State Cost (`Q`)**: Increasing the weights for the pole angle and cart position in the state cost matrix (`Q`) makes the controller **more sensitive to deviations in these states**. This results in **stronger corrective actions** by the controller to keep the pole upright.
+  
+- **Control Cost (`R`)**: Lowering the control cost (`R`) allows the controller to apply **stronger control forces** when needed. In the default case, a higher control cost limited the force that could be applied to the cart, leading to an inability to stabilize the pole. With a smaller `R`, the controller is free to apply larger forces, which leads to more effective stabilization.
 
-# Checkout your main branch
-git checkout main
+### **6. Conclusion:**
+- With the **default LQR cost matrices**, the system exhibits instability, with the pole falling within a few seconds due to insufficient control force and a lack of strong correction to maintain balance.
+- By increasing the **state cost matrix (`Q`)** and decreasing the **control cost matrix (`R`)**, the system becomes much more stable, allowing the pole to remain upright indefinitely with reasonable control force usage.
 
-# Merge upstream changes
-git merge upstream/main
-
-# Push the updates to your fork
-git push origin main
-```
-
-#### If you don't have a fork yet:
-1. Fork the course repository:
-   - Visit: https://github.com/DREAMS-lab/RAS-SES-598-Space-Robotics-and-AI
-   - Click "Fork" in the top-right corner
-   - Select your GitHub account as the destination
-
-2. Clone your fork:
-```bash
-cd ~/
-git clone https://github.com/YOUR_USERNAME/RAS-SES-598-Space-Robotics-and-AI.git
-```
-
-### Create Symlink to ROS2 Workspace
-```bash
-# Create symlink in your ROS2 workspace
-cd ~/ros2_ws/src
-ln -s ~/RAS-SES-598-Space-Robotics-and-AI/assignments/cart_pole_optimal_control .
-```
-
-### Building and Running
-```bash
-# Build the package
-cd ~/ros2_ws
-colcon build --packages-select cart_pole_optimal_control --symlink-install
-
-# Source the workspace
-source install/setup.bash
-
-# Launch the simulation with visualization
-ros2 launch cart_pole_optimal_control cart_pole_rviz.launch.py
-```
-
-This will start:
-- Gazebo simulation (headless mode)
-- RViz visualization showing:
-  * Cart-pole system
-  * Force arrows (control and disturbance forces)
-  * TF frames for system state
-- LQR controller
-- Earthquake force generator
-- Force visualizer
-
-### Visualization Features
-The RViz view provides a side perspective of the cart-pole system with:
-
-#### Force Arrows
-Two types of forces are visualized:
-1. Control Forces (at cart level):
-   - Red arrows: Positive control force (right)
-   - Blue arrows: Negative control force (left)
-
-2. Earthquake Disturbances (above cart):
-   - Orange arrows: Positive disturbance (right)
-   - Purple arrows: Negative disturbance (left)
-
-Arrow lengths are proportional to force magnitudes.
-
-## Analysis Requirements
-
-### Performance Metrics
-Students should analyze:
-1. Stability Metrics:
-   - Maximum pole angle deviation
-   - RMS cart position error
-   - Peak control force used
-   - Recovery time after disturbances
-
-2. System Constraints:
-   - Cart position limit: ±2.5m
-   - Control rate: 50Hz
-   - Pole angle stability
-   - Control effort efficiency
-
-### Analysis Guidelines
-1. Baseline Performance:
-   - Document system behavior with default parameters
-   - Identify key performance bottlenecks
-   - Analyze disturbance effects
-
-2. Parameter Effects:
-   - Analyze how Q matrix weights affect different states
-   - Study R value's impact on control aggressiveness
-   - Document trade-offs between objectives
-
-3. Disturbance Response:
-   - Characterize system response to different disturbance frequencies
-   - Analyze recovery behavior
-   - Study control effort distribution
-
-## Evaluation Criteria
-### Core Assignment (100 points)
-1. Analysis Quality (40 points)
-   - Depth of parameter analysis
-   - Quality of performance metrics
-   - Understanding of system behavior
-
-2. Performance Results (30 points)
-   - Stability under disturbances
-   - Constraint satisfaction
-   - Control efficiency
-
-3. Documentation (30 points)
-   - Clear analysis presentation
-   - Quality of data and plots
-   - Thoroughness of discussion
-
-### Extra Credit (up to 30 points)
-- Reinforcement Learning Implementation (30 points)
-
-## Tips for Success
-1. Start with understanding the existing controller behavior
-2. Document baseline performance thoroughly
-3. Make systematic parameter adjustments
-4. Keep detailed records of all tests
-5. Focus on understanding trade-offs
-6. Use visualizations effectively
-
-## Submission Requirements
-1. Technical report including:
-   - Analysis of controller behavior
-   - Performance data and plots
-   - Discussion of findings
-2. Video demonstration of system performance
-3. Any additional analysis tools or visualizations created
-
-## License
-This work is licensed under a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).
-[![Creative Commons License](https://i.creativecommons.org/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/) 
+This analysis demonstrates the importance of tuning the **LQR cost matrices** to achieve stable control in dynamic systems like the cart-pole problem.
