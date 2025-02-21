@@ -119,7 +119,27 @@ The terminal log from the modified parameters shows:
   
 - **Control Cost (`R`)**: Lowering the control cost (`R`) allows the controller to apply **stronger control forces** when needed. In the default case, a higher control cost limited the force that could be applied to the cart, leading to an inability to stabilize the pole. With a smaller `R`, the controller is free to apply larger forces, which leads to more effective stabilization.
 
-### **6. Conclusion:**
+
+### **6. Disturbance Response Analysis**:
+
+#### **Characterizing System Response to Different Disturbance Frequencies**:
+To evaluate the robustness of the LQR controller, we introduced disturbances at varying frequencies and amplitudes. The results show:
+- **Low-Frequency Disturbances** (e.g., slow external forces): The modified LQR parameters efficiently counteract slow drifts, keeping the pole stable.
+- **High-Frequency Disturbances** (e.g., sudden impulses): The controller with the modified parameters reacts more aggressively, effectively compensating for rapid disturbances while maintaining stability.
+
+#### **Recovery Behavior**:
+- With the **default parameters**, the system takes longer to return to equilibrium after a disturbance, often leading to oscillations or instability.
+- With the **modified parameters**, recovery is faster due to the higher control sensitivity, allowing the system to neutralize disturbances efficiently.
+
+#### **Control Effort Distribution**:
+- The default LQR **struggles to apply sufficient force** early, leading to instability and eventual failure.
+- The modified LQR **applies higher initial forces**, distributing control effort more efficiently over time, leading to smoother stabilization.
+
+
+
+
+
+### **7. Conclusion:**
 - With the **default LQR cost matrices**, the system exhibits instability, with the pole falling within a few seconds due to insufficient control force and a lack of strong correction to maintain balance.
 - By increasing the **state cost matrix (`Q`)** and decreasing the **control cost matrix (`R`)**, the system becomes much more stable, allowing the pole to remain upright indefinitely with reasonable control force usage.
 
