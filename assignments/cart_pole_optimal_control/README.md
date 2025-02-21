@@ -135,6 +135,8 @@ To evaluate the robustness of the LQR controller, we introduced disturbances at 
 - The default LQR **struggles to apply sufficient force** early, leading to instability and eventual failure.
 - The modified LQR **applies higher initial forces**, distributing control effort more efficiently over time, leading to smoother stabilization.
 
+### **7. Comparison summary:**
+
 
 | **Metric**               | **Default Parameters**                       | **Modified Parameters**                    |
 |--------------------------|---------------------------------|---------------------------------|
@@ -147,7 +149,7 @@ To evaluate the robustness of the LQR controller, we introduced disturbances at 
 
 
 
-### **7. Conclusion:**
+### **8. Conclusion:**
 - With the **default LQR cost matrices**, the system exhibits instability, with the pole falling within a few seconds due to insufficient control force and a lack of strong correction to maintain balance.
 - By increasing the **state cost matrix (`Q`)** and decreasing the **control cost matrix (`R`)**, the system becomes much more stable, allowing the pole to remain upright indefinitely with reasonable control force usage.
 
