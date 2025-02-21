@@ -66,7 +66,7 @@ The terminal log from the default parameters shows the following output:
 [lqr_controller-7] [INFO] [1740034471.242963200] [lqr_controller]: Peak Control Force Used: 301.772 N
 ```
 
-### **4. Performance with Modified Parameters (Your input)**:
+### **4. Performance with Modified Parameters (My input)**:
 
 With the new **LQR cost matrices**:
 - **State cost matrix (`Q`)**:
@@ -83,6 +83,7 @@ $$
 
 
 The system becomes much more stable:
+![Screenshot from 2025-02-21 04-46-13](https://github.com/user-attachments/assets/4ff361d5-7926-461c-bdbe-9403bd69ad67)
 
 - **Initial Condition**: The **max pole angle deviation** is reduced to 0.036 radians, and the **RMS cart position error** is reduced to 0.053 m. The control force is initially higher (**48.875 N**), which allows the system to make stronger corrections.
 
