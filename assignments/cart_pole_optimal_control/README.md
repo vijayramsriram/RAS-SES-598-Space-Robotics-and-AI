@@ -10,6 +10,7 @@ The performance of the system depends heavily on the values of the **state cost 
 
 ### **2. LQR Cost Matrices:**
 In the LQR controller, the following cost function is minimized:
+
 $$
 J = \int_0^\infty \left( x^T Q x + u^T R u \right) dt
 $$
