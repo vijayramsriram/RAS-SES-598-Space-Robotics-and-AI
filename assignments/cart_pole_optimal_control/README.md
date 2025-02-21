@@ -22,24 +22,31 @@ Where:
 - \( R \) is the control cost matrix.
 
 #### **Default Parameters**:
-- **State cost matrix (`Q`)**: 
-\[
+- **State cost matrix (`Q`)**:
+  
+$$
 Q = \text{diag}(1.0, 1.0, 10.0, 10.0)
-\]
-- **Control cost matrix (`R`)**: 
-\[
+$$
+
+- **Control cost matrix (`R`)**:
+
+$$
 R = 0.1
-\]
+$$
 
 #### **Modified Parameters** (Your input):
-- **State cost matrix (`Q`)**: 
-\[
+- **State cost matrix (`Q`)**:
+  
+$$
 Q = \text{diag}(1.0, 1.0, 50.0, 50.0)
-\]
-- **Control cost matrix (`R`)**: 
-\[
+$$
+
+- **Control cost matrix (`R`)**:
+
+$$
 R = 0.01
-\]
+$$
+
 
 ### **3. Performance with Default Parameters**:
 
@@ -62,14 +69,18 @@ The terminal log from the default parameters shows the following output:
 ### **4. Performance with Modified Parameters (Your input)**:
 
 With the new **LQR cost matrices**:
-- **State cost matrix (`Q`)**: 
-\[
+- **State cost matrix (`Q`)**:
+  
+$$
 Q = \text{diag}(1.0, 1.0, 50.0, 50.0)
-\]
+$$
+
 - **Control cost matrix (`R`)**: 
-\[
+
+$$
 R = 0.01
-\]
+$$
+
 
 The system becomes much more stable:
 
