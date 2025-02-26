@@ -14,18 +14,12 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch',
             glob('launch/*.launch.py')),
-        ('share/' + package_name + '/config', [
-            'config/terrain_mapping_params.yaml',
-            'config/drone_viz.rviz'
-        ]),
-        ('share/' + package_name + '/models/terrain', [
-            'models/terrain/model.config',
-            'models/terrain/model.sdf'
-        ]),
-        ('share/' + package_name + '/models/terrain/meshes', [
-            'models/terrain/meshes/artburysol175.obj',
-            'models/terrain/meshes/artburysol175.mtl'
-        ]),
+        ('share/' + package_name + '/config',
+            glob('config/*')),
+        ('share/' + package_name + '/models/terrain',
+            glob('models/terrain/*.*')),
+        ('share/' + package_name + '/models/terrain/meshes',
+            glob('models/terrain/meshes/*.*')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -33,11 +27,10 @@ setup(
     maintainer_email='your.email@example.com',
     description='A ROS2 package for executing spiral trajectory with PX4',
     license='Apache License 2.0',
+    tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'spiral_trajectory = terrain_mapping_drone_control.spiral_trajectory:main',
-            'feature_tracker = terrain_mapping_drone_control.feature_tracker:main',
-            'pose_visualizer = terrain_mapping_drone_control.pose_visualizer:main',
+            'px4_odom_converter = terrain_mapping_drone_control.px4_odom_converter:main',
         ],
     },
 ) 
