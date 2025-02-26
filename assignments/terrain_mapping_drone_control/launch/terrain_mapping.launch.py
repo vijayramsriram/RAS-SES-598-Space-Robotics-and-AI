@@ -38,16 +38,16 @@ def generate_launch_description():
         output='screen'
     )
     
-    # Spawn the terrain model
-    spawn_terrain = Node(
+    # Spawn the cylinder model
+    spawn_cylinder = Node(
         package='ros_gz_sim',
         executable='create',
         arguments=[
-            '-file', os.path.join(model_path, 'terrain', 'model.sdf'),
-            '-name', 'terrain',
-            '-x', '0',
+            '-file', os.path.join(model_path, 'cylinder', 'model.sdf'),
+            '-name', 'cylinder',
+            '-x', '5',  # 5 meters in front of the drone
             '-y', '0',
-            '-z', '0',
+            '-z', '0',  # Base at ground level since the cylinder's origin is at its center
             '-R', '0',
             '-P', '0',
             '-Y', '0'
@@ -55,10 +55,10 @@ def generate_launch_description():
         output='screen'
     )
     
-    # Wrap terrain spawning in TimerAction
-    delayed_terrain = TimerAction(
+    # Wrap cylinder spawning in TimerAction
+    delayed_cylinder = TimerAction(
         period=2.0,
-        actions=[spawn_terrain]
+        actions=[spawn_cylinder]
     )
 
     # Bridge node for camera and odometry
@@ -92,7 +92,7 @@ def generate_launch_description():
             default_value='True',
             description='Use simulation (Gazebo) clock if true'),
         px4_sitl,
-        delayed_terrain,
+        delayed_cylinder,
         TimerAction(
             period=3.0,
             actions=[bridge]

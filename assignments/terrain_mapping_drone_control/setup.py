@@ -20,6 +20,8 @@ setup(
             glob('models/terrain/*.*')),
         ('share/' + package_name + '/models/terrain/meshes',
             glob('models/terrain/meshes/*.*')),
+        ('share/' + package_name + '/models/cylinder',
+            glob('models/cylinder/*.*')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
