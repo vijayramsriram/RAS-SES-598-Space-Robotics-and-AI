@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 from glob import glob
 
@@ -22,6 +22,10 @@ setup(
             glob('models/terrain/meshes/*.*')),
         ('share/' + package_name + '/models/cylinder',
             glob('models/cylinder/*.*')),
+        ('share/' + package_name + '/models/cylinder/materials',
+            glob('models/cylinder/materials/*.*')),
+        ('share/' + package_name + '/scripts',
+            glob('scripts/*.*')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -33,6 +37,8 @@ setup(
     entry_points={
         'console_scripts': [
             'px4_odom_converter = terrain_mapping_drone_control.px4_odom_converter:main',
+            'cylinder_landing_node = terrain_mapping_drone_control.cylinder_landing_node:main',
         ],
     },
+    python_requires='>=3.8'
 ) 
