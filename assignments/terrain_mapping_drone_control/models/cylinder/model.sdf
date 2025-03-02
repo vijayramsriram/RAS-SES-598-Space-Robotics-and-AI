@@ -21,18 +21,22 @@
           </cylinder>
         </geometry>
         <material>
-          <ambient>0.0 0.0 0.8 1</ambient>
-          <diffuse>0.0 0.0 1.0 1</diffuse>
-          <specular>0.0 0.0 0.2 1</specular>
-          <emissive>0 0 0.2 1</emissive>
+          <ambient>1 1 1 1</ambient>
+          <diffuse>1 1 1 1</diffuse>
+          <specular>0.5 0.5 0.5 1</specular>
+          <pbr>
+            <metal>
+              <albedo_map>materials/cylinder_texture.png</albedo_map>
+            </metal>
+          </pbr>
         </material>
       </visual>
       
       <visual name="aruco_marker">
-        <pose>0 0 5.1 0 0 0</pose>
+        <pose>0 0 5.0 0 0 0</pose>
         <geometry>
           <box>
-            <size>0.8 0.8 0.01</size>
+            <size>0.8 0.8 0.001</size>
           </box>
         </geometry>
         <material>
