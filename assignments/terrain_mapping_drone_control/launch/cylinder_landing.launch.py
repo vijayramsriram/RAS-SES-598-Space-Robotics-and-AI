@@ -65,17 +65,30 @@ def generate_launch_description():
             'use_sim_time': True,
         }],
         arguments=[
-            # Camera topics (one-way from Gazebo to ROS)
-            '/camera@sensor_msgs/msg/Image[gz.msgs.Image',
-            '/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
-            # PX4 odometry (one-way from Gazebo to ROS)
+            # RGB Camera topics
+            '/camera/image@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo',
+            
+            # Depth Camera topics
+            '/camera/depth_image@sensor_msgs/msg/Image[gz.msgs.Image',
+            '/camera/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloud',
+            
+            # PX4 odometry
             '/model/x500_gimbal_0/odometry_with_covariance@nav_msgs/msg/Odometry[gz.msgs.Odometry',
-            # Clock (one-way from Gazebo to ROS)
+            
+            # Clock
             '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
         ],
         remappings=[
-            ('/camera', '/drone_camera'),
-            ('/camera_info', '/drone_camera_info'),
+            # RGB Camera remappings
+            ('/camera/image', '/drone/camera/rgb'),
+            ('/camera/camera_info', '/drone/camera/camera_info'),
+            
+            # Depth Camera remappings
+            ('/camera/depth_image', '/drone/camera/depth'),
+            ('/camera/points', '/drone/camera/points'),
+            
+            # Odometry remapping
             ('/model/x500_gimbal_0/odometry_with_covariance', '/fmu/out/vehicle_odometry'),
         ],
         output='screen'
