@@ -49,7 +49,7 @@ class ArucoTracker(Node):
         self.dist_coeffs = np.zeros(5)  # Default to no distortion
         self.calibration_received = False
         
-        self.marker_size = 0.15  # 15cm marker size
+        self.marker_size = 0.8  # 80cm marker size as per Gazebo model
         
         # Publishers
         self.debug_image_pub = self.create_publisher(Image, '/aruco/debug_image', 10)
