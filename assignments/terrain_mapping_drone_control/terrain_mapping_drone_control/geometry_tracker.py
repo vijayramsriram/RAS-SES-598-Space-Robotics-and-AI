@@ -40,14 +40,17 @@ class GeometryTracker(Node):
             # Replace NaN values with 0 for visualization
             depth_display[np.isnan(depth_display)] = 0
             
-            # Normalize depth for visualization (0 to 255)
-            depth_min = np.nanmin(depth_display)
-            depth_max = np.nanmax(depth_display)
-            if depth_max > depth_min:
-                depth_normalized = ((depth_display - depth_min) * 255 / (depth_max - depth_min))
-                depth_normalized = depth_normalized.astype(np.uint8)
-            else:
-                depth_normalized = np.zeros_like(depth_display, dtype=np.uint8)
+            # Set fixed depth range for better visualization (0-10 meters is a good range for indoor scenes)
+            depth_min = 0.0
+            depth_max = 10.0  # Maximum depth range to visualize
+            
+            # Clip depth values to the range and normalize
+            depth_normalized = np.clip(depth_display, depth_min, depth_max)
+            depth_normalized = ((depth_normalized - depth_min) * 255 / (depth_max - depth_min))
+            depth_normalized = depth_normalized.astype(np.uint8)
+            
+            # Apply histogram equalization to enhance contrast
+            depth_normalized = cv2.equalizeHist(depth_normalized)
             
             # Create debug image (BGR format for visualization)
             debug_image = cv2.cvtColor(depth_normalized, cv2.COLOR_GRAY2BGR)
