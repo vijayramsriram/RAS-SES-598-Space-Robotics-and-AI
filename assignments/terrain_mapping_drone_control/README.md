@@ -113,69 +113,87 @@ Score = w1*(Time_Efficiency) + w2*(Energy_Efficiency) +
 ```
 Where w1, w2, w3, and w4 are weight factors that will be revealed during evaluation.
 
-## Extra Credit: 3D Reconstruction
+## Scoring Breakdown (Total: 150 points)
 
-For additional points, implement 3D reconstruction of cylindrical rock formations using either:
-- RTAB-Map with the drone's front-facing RGBD camera (recommended)
-- ORBSLAM3 with monocular/stereo configuration
-- Any other SLAM package of your choice (must be justified in documentation)
+### Main Assignment (100 points)
 
-![image](https://github.com/user-attachments/assets/b8746282-de28-43b9-977e-dc1c93c211b1)
+#### Implementation (40 points)
+- Autonomous Navigation System (15 points)
+  - Takeoff and landing capabilities (5 points)
+  - Path planning implementation (5 points)
+  - Obstacle avoidance (5 points)
 
-### Requirements
+- Feature Detection (15 points)
+  - Rock formation detection accuracy (8 points)
+  - Real-time processing capability (7 points)
 
-- Subscribe to appropriate camera topics based on your chosen SLAM system:
-  - For RTAB-Map (RGBD):
-    - `/camera/rgb/image_raw`
-    - `/camera/depth/image_raw`
-    - `/camera/rgb/camera_info`
-  - For ORBSLAM3 (Monocular/Stereo):
-    - `/camera/image_raw`
-    - `/camera/right/image_raw` (if using stereo)
-  - For custom SLAM solutions: document required topics
-- Implement real-time 3D mapping
-- Implement cylinder fitting algorithm to reconstruct rock formations
-- Estimate cylinder parameters (radius, height, orientation)
-- Visualize the reconstructed 3D model in RViz
+- System Integration (10 points)
+  - ROS2 node architecture (5 points)
+  - Topic/service organization (5 points)
 
-### Implementation Guidelines
+#### Performance Metrics (40 points)
+- Mission Completion (15 points)
+  - Successfully identifying all rocks (8 points)
+  - Landing at designated location (7 points)
 
-1. SLAM Integration:
-```bash
-# For RTAB-Map
-ros2 launch terrain_mapping_drone_control rtabmap.launch.py
+- Efficiency Metrics (15 points)
+  - Time efficiency (8 points)
+  - Energy consumption (7 points)
 
-# For ORBSLAM3
-ros2 launch terrain_mapping_drone_control orbslam.launch.py
+- Accuracy Metrics (10 points)
+  - Centroid estimation error (5 points)
+  - Basal contact footprint error (5 points)
 
-# For custom SLAM
-ros2 launch terrain_mapping_drone_control custom_slam.launch.py
-```
+#### Documentation and Analysis (20 points)
+- Technical Documentation (10 points)
+  - System architecture description (3 points)
+  - Algorithm explanations (4 points)
+  - Installation/usage instructions (3 points)
 
-2. Point Cloud Processing:
-- Access the assembled point cloud from your SLAM system
-- Filter and segment the point cloud
-- Identify potential cylindrical formations
-- Apply RANSAC-based cylinder fitting
+- Performance Analysis (10 points)
+  - Test results analysis (5 points)
+  - Performance optimization discussion (5 points)
 
-### Evaluation Metrics
+### Extra Credit: 3D Reconstruction (50 points)
 
-Extra credit points will be awarded based on:
-- Accuracy of cylinder parameter estimation
-- Real-time processing capability
-- Quality of 3D reconstruction
-- Visualization quality
-- Documentation of methodology
-- Justification for chosen SLAM system
-- Innovation in approach
+#### SLAM Implementation (25 points)
+- SLAM Integration (15 points)
+  - System setup and configuration (5 points)
+  - Real-time mapping capability (5 points)
+  - Point cloud generation (5 points)
 
-### Required Dependencies for Extra Credit
-- Point Cloud Library (PCL)
-- Open3D (optional)
-- SLAM package of your choice:
-  - RTAB-Map ROS2 package
-  - ORBSLAM3 ROS2 package
-  - Other (must be documented)
+- Feature Reconstruction (10 points)
+  - Cylinder fitting implementation (5 points)
+  - Parameter estimation accuracy (5 points)
+
+#### Analysis and Visualization (15 points)
+- 3D Model Quality (8 points)
+  - Reconstruction accuracy (4 points)
+  - Point cloud density/coverage (4 points)
+
+- Visualization (7 points)
+  - RViz integration (4 points)
+  - User interface/controls (3 points)
+
+#### Documentation and Innovation (10 points)
+- Technical Write-up (5 points)
+  - Methodology description (2 points)
+  - Results analysis (3 points)
+
+- Innovation (5 points)
+  - Novel approaches/improvements (3 points)
+  - Performance optimizations (2 points)
+
+### Minimum Requirements
+- Must score at least 70 points in main assignment to be eligible for extra credit
+- Extra credit implementation must maintain real-time performance
+- All code must be properly documented and tested
+
+### Bonus Points (up to 10 additional points)
+- Exceptional innovation in approach
+- Outstanding performance metrics
+- Novel visualization techniques
+- Significant optimizations
 
 ## License
 
