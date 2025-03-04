@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+  <model name="cylinder_short">
+    <static>true</static>
+    <link name="link">
+      <visual name="visual">
+        <geometry>
+          <cylinder>
+            <radius>0.5</radius>
+            <length>7.0</length>  <!-- 7m tall -->
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.3 0.3 0.3 1</ambient>
+          <diffuse>0.7 0.7 0.7 1</diffuse>
+          <specular>0.01 0.01 0.01 1</specular>
+        </material>
+      </visual>
+      <collision name="collision">
+        <geometry>
+          <cylinder>
+            <radius>0.5</radius>
+            <length>7.0</length>
+          </cylinder>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf> 
