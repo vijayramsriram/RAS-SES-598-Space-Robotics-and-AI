@@ -112,7 +112,42 @@ Score = w1*(Time_Efficiency) + w2*(Energy_Efficiency) +
 ```
 Where w1, w2, w3, and w4 are weight factors that will be revealed during evaluation.
 
+## Extra Credit: 3D Reconstruction
 
+For additional points, implement 3D reconstruction of cylindrical rock formations using ORBSLAM3:
+
+### Requirements
+
+- Subscribe to ORBSLAM3's point cloud output topic `/orbslam3/point_cloud`
+- Implement cylinder fitting algorithm to reconstruct rock formations
+- Estimate cylinder parameters (radius, height, orientation)
+- Visualize the reconstructed 3D model in RViz
+
+### Implementation Guidelines
+
+1. ORBSLAM3 Integration:
+```bash
+# Subscribe to ORBSLAM3 topics
+ros2 run terrain_mapping_drone_control orbslam_processor
+```
+
+2. Point Cloud Processing:
+- Filter and segment the point cloud
+- Identify potential cylindrical formations
+- Apply RANSAC-based cylinder fitting
+
+### Evaluation Metrics
+
+Extra credit points will be awarded based on:
+- Accuracy of cylinder parameter estimation
+- Real-time processing capability
+- Visualization quality
+- Documentation of methodology
+
+### Required Dependencies for Extra Credit
+- ORBSLAM3 ROS2 package
+- Point Cloud Library (PCL)
+- Open3D (optional)
 
 ## License
 
