@@ -118,7 +118,7 @@ def generate_launch_description():
         ),
         Node(
             package='terrain_mapping_drone_control',
-            executable='terrain_mapping_drone_control_geometry_tracker',
+            executable='geometry_tracker.py',
             name='geometry_tracker',
             output='screen'
         )

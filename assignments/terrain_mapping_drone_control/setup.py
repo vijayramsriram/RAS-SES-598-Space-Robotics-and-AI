@@ -23,7 +23,12 @@ setup(
         ('share/' + package_name + '/models/cylinder',
             glob('models/cylinder/*.*')),
         ('share/' + package_name + '/models/cylinder/materials',
-            glob('models/cylinder/materials/*.*'))
+            glob('models/cylinder/materials/*.*')),
+        ('lib/' + package_name, [
+            'terrain_mapping_drone_control/geometry_tracker.py',
+            'terrain_mapping_drone_control/cylinder_landing_node.py',
+            'terrain_mapping_drone_control/aruco_tracker.py'
+        ])
     ],
     install_requires=['setuptools'],
     zip_safe=True,
