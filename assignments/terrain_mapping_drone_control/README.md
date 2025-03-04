@@ -115,30 +115,45 @@ Where w1, w2, w3, and w4 are weight factors that will be revealed during evaluat
 
 ## Extra Credit: 3D Reconstruction
 
-For additional points, implement 3D reconstruction of cylindrical rock formations using RTAB-Map and the drone's front-facing RGBD camera:
+For additional points, implement 3D reconstruction of cylindrical rock formations using either:
+- RTAB-Map with the drone's front-facing RGBD camera (recommended)
+- ORBSLAM3 with monocular/stereo configuration
+- Any other SLAM package of your choice (must be justified in documentation)
+
 ![image](https://github.com/user-attachments/assets/b8746282-de28-43b9-977e-dc1c93c211b1)
 
 ### Requirements
 
-- Subscribe to RGBD camera topics:
-  - `/camera/rgb/image_raw`
-  - `/camera/depth/image_raw`
-  - `/camera/rgb/camera_info`
-- Use RTAB-Map for real-time 3D mapping
+- Subscribe to appropriate camera topics based on your chosen SLAM system:
+  - For RTAB-Map (RGBD):
+    - `/camera/rgb/image_raw`
+    - `/camera/depth/image_raw`
+    - `/camera/rgb/camera_info`
+  - For ORBSLAM3 (Monocular/Stereo):
+    - `/camera/image_raw`
+    - `/camera/right/image_raw` (if using stereo)
+  - For custom SLAM solutions: document required topics
+- Implement real-time 3D mapping
 - Implement cylinder fitting algorithm to reconstruct rock formations
 - Estimate cylinder parameters (radius, height, orientation)
 - Visualize the reconstructed 3D model in RViz
 
 ### Implementation Guidelines
 
-1. RTAB-Map Integration:
+1. SLAM Integration:
 ```bash
-# Launch RTAB-Map with the drone's RGBD camera
+# For RTAB-Map
 ros2 launch terrain_mapping_drone_control rtabmap.launch.py
+
+# For ORBSLAM3
+ros2 launch terrain_mapping_drone_control orbslam.launch.py
+
+# For custom SLAM
+ros2 launch terrain_mapping_drone_control custom_slam.launch.py
 ```
 
 2. Point Cloud Processing:
-- Access the assembled point cloud from RTAB-Map
+- Access the assembled point cloud from your SLAM system
 - Filter and segment the point cloud
 - Identify potential cylindrical formations
 - Apply RANSAC-based cylinder fitting
@@ -151,11 +166,16 @@ Extra credit points will be awarded based on:
 - Quality of 3D reconstruction
 - Visualization quality
 - Documentation of methodology
+- Justification for chosen SLAM system
+- Innovation in approach
 
 ### Required Dependencies for Extra Credit
-- RTAB-Map ROS2 package
 - Point Cloud Library (PCL)
 - Open3D (optional)
+- SLAM package of your choice:
+  - RTAB-Map ROS2 package
+  - ORBSLAM3 ROS2 package
+  - Other (must be documented)
 
 ## License
 
