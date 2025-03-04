@@ -33,28 +33,63 @@ The assignment will be evaluated based on:
 - OpenCV
 - Python 3.8+
 
-## Installation
+## Repository Setup
 
-1. Clone this assignment package into your ROS2 workspace:
+### If you already have a fork of the course repository:
+
 ```bash
+# Navigate to your local copy of the repository
+cd ~/RAS-SES-598-Space-Robotics-and-AI
+
+# Add the original repository as upstream (if not already done)
+git remote add upstream https://github.com/DREAMS-lab/RAS-SES-598-Space-Robotics-and-AI.git
+
+# Fetch the latest changes from upstream
+git fetch upstream
+
+# Checkout your main branch
+git checkout main
+
+# Merge upstream changes
+git merge upstream/main
+
+# Push the updates to your fork
+git push origin main
+```
+
+### If you don't have a fork yet:
+
+1. Fork the course repository:
+   - Visit: https://github.com/DREAMS-lab/RAS-SES-598-Space-Robotics-and-AI
+   - Click "Fork" in the top-right corner
+   - Select your GitHub account as the destination
+
+2. Clone your fork:
+```bash
+cd ~/
+git clone https://github.com/YOUR_USERNAME/RAS-SES-598-Space-Robotics-and-AI.git
+```
+
+### Create Symlink to ROS2 Workspace
+
+```bash
+# Create symlink in your ROS2 workspace
 cd ~/ros2_ws/src
-git clone <course_repository_url>
+ln -s ~/RAS-SES-598-Space-Robotics-and-AI/assignments/terrain_mapping_drone_control .
 ```
 
-2. Install dependencies:
+## Building and Running
+
 ```bash
+# Build the package
 cd ~/ros2_ws
-rosdep install --from-paths src --ignore-src -r -y
-```
+colcon build --packages-select terrain_mapping_drone_control --symlink-install
 
-3. Build the package:
-```bash
-colcon build --packages-select terrain_mapping_drone_control
-```
+# Source the workspace
+source install/setup.bash
 
-4. Source the workspace:
-```bash
-source ~/ros2_ws/install/setup.bash
+# Launch the simulation with visualization
+ros2 launch terrain_mapping_drone_control challenge.launch.py
 ```
 
 ## Usage
@@ -125,7 +160,7 @@ Where w1, w2, w3, and w4 are weight factors that will be revealed during evaluat
 
 - Feature Detection (15 points)
   - Rock formation detection accuracy (8 points)
-  - Real-time processing capability (7 points)
+  - Real-time mapping capability (7 points)
 
 - System Integration (10 points)
   - ROS2 node architecture (5 points)
@@ -133,7 +168,7 @@ Where w1, w2, w3, and w4 are weight factors that will be revealed during evaluat
 
 #### Performance Metrics (40 points)
 - Mission Completion (15 points)
-  - Successfully identifying all rocks (8 points)
+  - Successfully identifying and estimating rock geometry features (8 points)
   - Landing at designated location (7 points)
 
 - Efficiency Metrics (15 points)
