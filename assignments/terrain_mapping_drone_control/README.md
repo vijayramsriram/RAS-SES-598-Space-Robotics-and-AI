@@ -116,6 +116,7 @@ Where w1, w2, w3, and w4 are weight factors that will be revealed during evaluat
 ## Extra Credit: 3D Reconstruction
 
 For additional points, implement 3D reconstruction of cylindrical rock formations using ORBSLAM3:
+![image](https://github.com/user-attachments/assets/22be1c0c-e493-4a94-a8c6-322be8056129)
 
 ### Requirements
 
