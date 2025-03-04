@@ -4,25 +4,31 @@ This ROS2 package implements an autonomous drone system for geological feature d
 
 ## Challenge Overview
 
-Students will develop a controller for a PX4-powered drone to efficiently search, map, and analyze geological features in an unknown environment. The system must identify rock formations, estimate their centroids, and determine basal contact footprints while optimizing for time and energy consumption.
-![image](https://github.com/user-attachments/assets/a176275d-f305-495b-8f0f-89e83ef838e2)
+Students will develop a controller for a PX4-powered drone to efficiently search, map, and analyze cylindrical rock formations in an unknown environment. The drone must identify two rock formations (10m and 7m tall cylinders), estimate their dimensions, and successfully land on top of the taller cylinder.
+
+### Mission Objectives
+1. Search and locate both cylindrical rock formations
+2. Map and analyze rock dimensions:
+   - Estimate height and diameter of each cylinder
+   - Determine relative positions
+3. Land safely on top of the taller (10m) cylinder
+4. Complete mission within time and energy constraints
 
 ### Evaluation Criteria
 
 The assignment will be evaluated based on:
 - Total time taken to complete the mission
 - Total energy units consumed during operation
-- Accuracy of centroid estimates for rock formations
-- Precision of basal contact footprint estimation
+- Accuracy of cylinder dimension estimates
+- Landing precision on the taller cylinder
 - Performance across multiple trials (10 known + 5 unknown scenes)
 
 ### Key Requirements
 
-- Autonomous takeoff and landing capabilities
-- Efficient search strategy implementation
-- Real-time feature detection and mapping
+- Autonomous takeoff and search strategy implementation
+- Real-time cylinder detection and dimension estimation
 - Energy-conscious path planning
-- Accurate geological feature analysis
+- Safe and precise landing on the target cylinder
 - Robust performance across different scenarios
 
 ## Prerequisites
@@ -120,15 +126,19 @@ Customize your solution through the following configuration files:
 ### Key Parameters
 
 - `search_strategy`: Algorithm for area exploration
-- `feature_detection_params`: Rock formation detection parameters
+- `cylinder_detection_params`: Rock formation detection parameters
+- `landing_threshold`: Required landing precision
 - `energy_threshold`: Maximum energy units allowed
 - `time_limit`: Maximum mission duration
-- `analysis_precision`: Required accuracy for measurements
 
 ## Submission Requirements
 
 1. Your complete ROS2 package with implemented solution
-2. Documentation of your approach and algorithms
+2. Documentation of your approach and algorithms:
+   - Search strategy
+   - Cylinder detection method
+   - Dimension estimation approach
+   - Landing strategy
 3. Performance analysis across 10 test trials
 4. Brief video demonstration (2-3 minutes)
 
@@ -144,7 +154,7 @@ The leaderboard will be available mid-Spring break and will display:
 Final score is calculated based on:
 ```
 Score = w1*(Time_Efficiency) + w2*(Energy_Efficiency) + 
-        w3*(Centroid_Accuracy) + w4*(Footprint_Accuracy)
+        w3*(Cylinder_Dimension_Accuracy) + w4*(Landing_Precision)
 ```
 Where w1, w2, w3, and w4 are weight factors that will be revealed during evaluation.
 
@@ -176,8 +186,8 @@ Where w1, w2, w3, and w4 are weight factors that will be revealed during evaluat
   - Energy consumption (7 points)
 
 - Accuracy Metrics (10 points)
-  - Centroid estimation error (5 points)
-  - Basal contact footprint error (5 points)
+  - Cylinder dimension estimation error (5 points)
+  - Landing precision (5 points)
 
 #### Documentation and Analysis (20 points)
 - Technical Documentation (10 points)
