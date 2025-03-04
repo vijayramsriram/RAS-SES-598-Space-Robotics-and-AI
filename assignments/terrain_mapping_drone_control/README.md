@@ -1,18 +1,28 @@
-# Terrain Mapping Drone Control
+# Assignment 3: Rocky Times Challenge - Search, Map, & Analyze
 
-This ROS2 package implements a drone control system for terrain mapping of the Bishop Fault Scarp using ORBSLAM3 and PX4 SITL simulation.
+This ROS2 package implements an autonomous drone system for geological feature detection, mapping, and analysis using ORBSLAM3 and PX4 SITL simulation.
 
-## Overview
+## Challenge Overview
 
-The package provides a controller that guides a PX4-powered drone in a lawnmower pattern over the Bishop Fault Scarp area while maintaining a constant height. The drone captures images that are processed by ORBSLAM3 for simultaneous localization and mapping (SLAM).
+Students will develop a controller for a PX4-powered drone to efficiently search, map, and analyze geological features in an unknown environment. The system must identify rock formations, estimate their centroids, and determine basal contact footprints while optimizing for time and energy consumption.
 
-### Key Features
+### Evaluation Criteria
 
-- Automated takeoff and landing
-- Lawnmower pattern trajectory generation for complete area coverage
-- Integration with ORBSLAM3 for real-time mapping
-- Configurable survey parameters (height, speed, area dimensions)
-- Automatic return to launch point after survey completion
+The assignment will be evaluated based on:
+- Total time taken to complete the mission
+- Total energy units consumed during operation
+- Accuracy of centroid estimates for rock formations
+- Precision of basal contact footprint estimation
+- Performance across multiple trials (10 known + 5 unknown scenes)
+
+### Key Requirements
+
+- Autonomous takeoff and landing capabilities
+- Efficient search strategy implementation
+- Real-time feature detection and mapping
+- Energy-conscious path planning
+- Accurate geological feature analysis
+- Robust performance across different scenarios
 
 ## Prerequisites
 
@@ -24,10 +34,10 @@ The package provides a controller that guides a PX4-powered drone in a lawnmower
 
 ## Installation
 
-1. Clone this package into your ROS2 workspace:
+1. Clone this assignment package into your ROS2 workspace:
 ```bash
 cd ~/ros2_ws/src
-git clone <repository_url>
+git clone <course_repository_url>
 ```
 
 2. Install dependencies:
@@ -48,68 +58,72 @@ source ~/ros2_ws/install/setup.bash
 
 ## Usage
 
-1. Launch the complete system (PX4 SITL, ORBSLAM3, and the controller):
+1. Launch the simulation environment and your solution:
 ```bash
-ros2 launch terrain_mapping_drone_control terrain_mapping.launch.py
+ros2 launch terrain_mapping_drone_control challenge.launch.py
 ```
 
-### Manual Camera Bridge Setup
-If you need to manually bridge the Gazebo camera topics to ROS2, you can use the following commands:
+2. Monitor mission progress:
 ```bash
-# Bridge RGB camera
-ros2 run ros_gz_bridge parameter_bridge /camera@sensor_msgs/msg/Image@gz.msgs.Image
-
-# Bridge depth camera
-ros2 run ros_gz_bridge parameter_bridge /depth_camera@sensor_msgs/msg/Image@gz.msgs.Image
-
-# Bridge camera info
-ros2 run ros_gz_bridge parameter_bridge /camera_info@sensor_msgs/msg/CameraInfo@gz.msgs.CameraInfo
-
-# Bridge point cloud
-ros2 run ros_gz_bridge parameter_bridge /depth_camera/points@sensor_msgs/msg/PointCloud2@gz.msgs.PointCloud
+ros2 topic echo /drone/mission_status
 ```
 
-2. Monitor the progress:
-```bash
-ros2 topic echo /terrain_mapping_controller/status
-```
-
-3. View the ORBSLAM3 visualization:
+3. Visualize the mapping process:
 ```bash
 ros2 run rqt_image_view rqt_image_view
 ```
 
 ## Configuration
 
-The package behavior can be configured through the following files:
+Customize your solution through the following configuration files:
 
-- `config/terrain_mapping_params.yaml`: Main configuration file for flight parameters
-- `config/camera_calibration.yaml`: Camera calibration parameters for ORBSLAM3
-- `launch/terrain_mapping.launch.py`: Launch file configuration
+- `config/challenge_params.yaml`: Mission parameters and thresholds
+- `config/sensor_config.yaml`: Sensor and camera configurations
+- `launch/challenge.launch.py`: Simulation and algorithm parameters
 
 ### Key Parameters
 
-- `mapping_height`: Flight altitude in meters
-- `survey_speed`: Drone velocity during mapping
-- `area_length`: Length of the survey area (X direction)
-- `area_width`: Width of the survey area (Y direction)
-- `strip_spacing`: Distance between parallel survey lines
+- `search_strategy`: Algorithm for area exploration
+- `feature_detection_params`: Rock formation detection parameters
+- `energy_threshold`: Maximum energy units allowed
+- `time_limit`: Maximum mission duration
+- `analysis_precision`: Required accuracy for measurements
 
-## Output
+## Submission Requirements
 
-The system generates the following outputs:
+1. Your complete ROS2 package with implemented solution
+2. Documentation of your approach and algorithms
+3. Performance analysis across 10 test trials
+4. Brief video demonstration (2-3 minutes)
 
-1. ORBSLAM3 trajectory and map data
-2. Flight telemetry logs
-3. Captured images
-4. Generated point cloud of the terrain
+## Leaderboard
 
-Data is saved to the path specified in the configuration file.
+The leaderboard will be available mid-Spring break and will display:
+- Team rankings based on composite scores
+- Individual performance metrics
+- Statistics from both known and unknown trial runs
+
+## Scoring Formula
+
+Final score is calculated based on:
+```
+Score = w1*(Time_Efficiency) + w2*(Energy_Efficiency) + 
+        w3*(Centroid_Accuracy) + w4*(Footprint_Accuracy)
+```
+Where w1, w2, w3, and w4 are weight factors that will be revealed during evaluation.
+
+
 
 ## License
 
-Apache License 2.0
+This assignment is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC-SA 4.0). This means you are free to:
 
-## Contributing
+- Share: Copy and redistribute the material in any medium or format
+- Adapt: Remix, transform, and build upon the material
 
-Contributions are welcome! Please feel free to submit a Pull Request. 
+Under the following terms:
+- Attribution: You must give appropriate credit
+- NonCommercial: You may not use the material for commercial purposes
+- ShareAlike: If you remix, transform, or build upon the material, you must distribute your contributions under the same license
+
+For more details: https://creativecommons.org/licenses/by-nc-sa/4.0/ 
