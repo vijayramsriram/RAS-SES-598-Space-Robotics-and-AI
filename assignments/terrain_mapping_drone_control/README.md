@@ -1,6 +1,6 @@
 # Assignment 3: Rocky Times Challenge - Search, Map, & Analyze
 
-This ROS2 package implements an autonomous drone system for geological feature detection, mapping, and analysis using ORBSLAM3 and PX4 SITL simulation.
+This ROS2 package implements an autonomous drone system for geological feature detection, mapping, and analysis using an RGBD camera and PX4 SITL simulation.
 
 ## Challenge Overview
 
@@ -29,7 +29,7 @@ The assignment will be evaluated based on:
 
 - ROS2 Humble
 - PX4 SITL Simulator
-- ORBSLAM3 ROS2 package
+- RTAB-Map ROS2 package
 - OpenCV
 - Python 3.8+
 
@@ -115,25 +115,30 @@ Where w1, w2, w3, and w4 are weight factors that will be revealed during evaluat
 
 ## Extra Credit: 3D Reconstruction
 
-For additional points, implement 3D reconstruction of cylindrical rock formations using ORBSLAM3:
+For additional points, implement 3D reconstruction of cylindrical rock formations using RTAB-Map and the drone's front-facing RGBD camera:
 ![image](https://github.com/user-attachments/assets/b8746282-de28-43b9-977e-dc1c93c211b1)
 
 ### Requirements
 
-- Subscribe to ORBSLAM3's point cloud output topic `/orbslam3/point_cloud`
+- Subscribe to RGBD camera topics:
+  - `/camera/rgb/image_raw`
+  - `/camera/depth/image_raw`
+  - `/camera/rgb/camera_info`
+- Use RTAB-Map for real-time 3D mapping
 - Implement cylinder fitting algorithm to reconstruct rock formations
 - Estimate cylinder parameters (radius, height, orientation)
 - Visualize the reconstructed 3D model in RViz
 
 ### Implementation Guidelines
 
-1. ORBSLAM3 Integration:
+1. RTAB-Map Integration:
 ```bash
-# Subscribe to ORBSLAM3 topics
-ros2 run terrain_mapping_drone_control orbslam_processor
+# Launch RTAB-Map with the drone's RGBD camera
+ros2 launch terrain_mapping_drone_control rtabmap.launch.py
 ```
 
 2. Point Cloud Processing:
+- Access the assembled point cloud from RTAB-Map
 - Filter and segment the point cloud
 - Identify potential cylindrical formations
 - Apply RANSAC-based cylinder fitting
@@ -143,11 +148,12 @@ ros2 run terrain_mapping_drone_control orbslam_processor
 Extra credit points will be awarded based on:
 - Accuracy of cylinder parameter estimation
 - Real-time processing capability
+- Quality of 3D reconstruction
 - Visualization quality
 - Documentation of methodology
 
 ### Required Dependencies for Extra Credit
-- ORBSLAM3 ROS2 package
+- RTAB-Map ROS2 package
 - Point Cloud Library (PCL)
 - Open3D (optional)
 
