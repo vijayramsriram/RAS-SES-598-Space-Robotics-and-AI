@@ -5,6 +5,7 @@ This ROS2 package implements an autonomous drone system for geological feature d
 ## Challenge Overview
 
 Students will develop a controller for a PX4-powered drone to efficiently search, map, and analyze geological features in an unknown environment. The system must identify rock formations, estimate their centroids, and determine basal contact footprints while optimizing for time and energy consumption.
+![image](https://github.com/user-attachments/assets/a176275d-f305-495b-8f0f-89e83ef838e2)
 
 ### Evaluation Criteria
 
