@@ -84,6 +84,21 @@ cd ~/ros2_ws/src
 ln -s ~/RAS-SES-598-Space-Robotics-and-AI/assignments/terrain_mapping_drone_control .
 ```
 
+### Copy PX4 Model Files
+
+Before building the package, you need to copy the required PX4 model files:
+
+```bash
+# Navigate to the package
+cd ~/ros2_ws/src/terrain_mapping_drone_control
+
+# Make the setup script executable
+chmod +x scripts/setup_px4_model.sh
+
+# Run the setup script to copy model files
+./scripts/setup_px4_model.sh
+```
+
 ## Building and Running
 
 ```bash
