@@ -12,7 +12,9 @@ Students will develop a controller for a PX4-powered drone to efficiently search
    - Estimate height and diameter of each cylinder
    - Determine positions in the world frame
 3. Land safely on top of the taller cylinder
-4. Complete mission while logging time and energy perforance. 
+4. Complete mission while logging time and energy performance. 
+
+![Screenshot from 2025-03-04 20-22-35](https://github.com/user-attachments/assets/3548b6da-613a-401d-bf38-e9e3ac4a2a2b)
 
 ### Evaluation Criteria (100 points)
 
