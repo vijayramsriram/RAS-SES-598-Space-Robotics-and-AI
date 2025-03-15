@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version='1.9'>
-  <model name='OakD-Lite'>
+  <model name='OakD-Lite-Modify'>
     <pose>0 0 0 0 0 0</pose>
     <self_collide>false</self_collide>
     <static>false</static>
-    <link name="OakD-Lite/base_link">
+    <link name="OakD-Lite-Modify/base_link">
       <inertial>
         <pose>0.00358 -0.03 .014 0 0 0</pose>
         <mass>0.061</mass>
@@ -17,16 +17,16 @@
           <izz>0.0000436519</izz>
         </inertia>
       </inertial>
-      <visual name="OakD-Lite/visual">
+      <visual name="OakD-Lite-Modify/visual">
         <pose>0 0 0 0 0 0</pose>
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>model://OakD-Lite/meshes/OakDLite.dae</uri>
+            <uri>model://OakD-Lite-Modify/meshes/OakDLite.dae</uri>
           </mesh>
         </geometry>
       </visual>
-      <collision name="OakD-Lite/collision">
+      <collision name="OakD-Lite-Modify/collision">
         <pose>0.00358 -0.03 .014 0 0 0</pose>
         <geometry>
           <box>
