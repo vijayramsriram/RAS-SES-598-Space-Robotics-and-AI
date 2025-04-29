@@ -222,9 +222,16 @@ run the energy logger node after the drone arms and lifts a little.
 ros2 run terrain_mapping_drone_control energy_logger.py
 ```
 
- 
+
+
+**rqt_graph**
+
+
+ ![image](https://github.com/user-attachments/assets/7291d843-08b6-40c3-aa6d-262bb79058e5)
+
 
 🏁 **Final Result**
+
 ![image](https://github.com/user-attachments/assets/baf82ba8-ec47-4e64-b993-63ecf235087a)
 
 
