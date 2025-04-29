@@ -32,7 +32,10 @@ setup(
             glob('models/cylinder_small/materials/textures/*.*')),
         ('lib/' + package_name, [
             'terrain_mapping_drone_control/cylinder_landing_node.py',
-            'terrain_mapping_drone_control/aruco_tracker.py'
+            'terrain_mapping_drone_control/aruco_tracker.py',
+            'terrain_mapping_drone_control/aruco_landing.py',
+            'terrain_mapping_drone_control/takeoff_and_hover.py',
+            'terrain_mapping_drone_control/spiral_trajectory.py'
         ]),
         ('share/' + package_name + '/models/cylinder_short',
             glob('models/cylinder_short/*.*')),
@@ -54,8 +57,12 @@ setup(
             'px4_odom_converter = terrain_mapping_drone_control.px4_odom_converter:main',
             'feature_tracker = terrain_mapping_drone_control.feature_tracker:main',
             'pose_visualizer = terrain_mapping_drone_control.pose_visualizer:main',
+            'camera_info_publisher = terrain_mapping_drone_control.camera_info_publisher:main',
             'spiral_trajectory = terrain_mapping_drone_control.spiral_trajectory:main',
             'aruco_tracker = terrain_mapping_drone_control.aruco_tracker:main',
+            'aruco_landing = terrain_mapping_drone_control.aruco_landing:main',
+            'aruco_landing_controller = terrain_mapping_drone_control.aruco_landing_controller:main',
+            'takeoff_and_hover = terrain_mapping_drone_control.takeoff_and_hover:main',
         ],
     },
     python_requires='>=3.8'
