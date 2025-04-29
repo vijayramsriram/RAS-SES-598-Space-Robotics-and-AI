@@ -110,7 +110,7 @@ To receive PX4 odometry correctly, this node uses:
 - **Best Effort** QoS (matching PX4’s publisher)
 - Depth = 10
 
-```python
+python
 from rclpy.qos import QoSProfile, QoSReliabilityPolicy
 
 qos_profile = QoSProfile(
