@@ -65,9 +65,9 @@ to estimate **marker distance** and **approximate cylinder dimensions**.
 
 The distance is estimated using the **pinhole camera model**:
 
-\[
+$
 \text{Distance} = \frac{f_x \times \text{Marker Real Size}}{\text{Marker Pixel Width}}
-\]
+$
 
 where:
 - \( f_x \) = focal length in pixels
