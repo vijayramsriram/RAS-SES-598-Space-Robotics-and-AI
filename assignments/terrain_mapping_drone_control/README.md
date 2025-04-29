@@ -46,3 +46,38 @@ In this project, I developed **two ROS 2 nodes** to achieve an autonomous drone 
 ```bash
 ros2 launch terrain_mapping_drone_control cylinder_landing.launch.py
 
+This will:
+
+-Start Gazebo simulation
+-Load arena environment
+-Spawn cylinder object with attached ArUco marker
+
+2. **Start the Micro XRCE Agent for PX4:**
+
+```bash
+MicroXRCEAgent udp4 -p 8888
+
+3. **Run the Takeoff Node:**
+
+```bash
+ros2 run terrain_mapping_drone_control takeoff_and_hover.py
+
+This will:
+-Arm the drone
+-Engage OFFBOARD mode
+-Smoothly takeoff to 15 meters
+-Hover stably at the target altitude
+
+1. **Run the ArUco Landing Node:**
+
+```bash
+ros2 run terrain_mapping_drone_control aruco_landing.py
+
+This will:
+-Start detecting ArUco markers using onboard camera
+-Align the drone over the marker using velocity control
+-Command the drone to LAND once centered over the marker
+
+🏁 Final Result
+
+
