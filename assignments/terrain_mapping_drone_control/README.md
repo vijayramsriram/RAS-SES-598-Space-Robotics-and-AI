@@ -86,7 +86,7 @@ This will:
 -Align the drone over the marker using velocity control
 -Command the drone to LAND once centered over the marker
 
-🏁 Final Result
+🏁 **Final Result**
 ![image](https://github.com/user-attachments/assets/baf82ba8-ec47-4e64-b993-63ecf235087a)
 
 
