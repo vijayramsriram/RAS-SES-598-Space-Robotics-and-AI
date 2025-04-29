@@ -25,6 +25,58 @@ In this project, I developed **two ROS 2 nodes** to achieve an autonomous drone 
 ![image](https://github.com/user-attachments/assets/5db78375-8d41-4a06-97c1-fc9f4ef10dc0)
 
 
+# 📏 Dimension Estimator Node (`dimension_estimator.py`)
+
+---
+The `dimension_estimator.py` node is designed to estimate the distance between the drone and the ArUco marker in the scene.
+
+It uses:
+
+- Camera image feed (`/rgb_camera`)
+- OpenCV ArUco detection
+- Pinhole camera model equations
+
+to estimate **marker distance** and **approximate cylinder dimensions**.
+
+✅ Real-time distance calculation from marker pixel size.
+
+---
+
+## 🛠️ How It Works
+
+| Step | Description |
+|:-----|:------------|
+| 1 | Subscribe to camera images `/rgb_camera` |
+| 2 | Detect ArUco markers using OpenCV |
+| 3 | Calculate average **pixel width** of detected marker |
+| 4 | Use known camera **focal length** and **marker size** to estimate distance |
+| 5 | Print/log estimated distance to the marker |
+
+---
+
+## 📐 Important Parameters
+
+| Parameter | Value | Description |
+|:----------|:------|:------------|
+| `marker_real_size` | `0.2` meters | Real-world size of the ArUco marker |
+| `fx` | `554.0` pixels | Camera focal length (assumed) |
+
+---
+
+## 📈 Distance Estimation Formula
+
+The distance is estimated using the **pinhole camera model**:
+
+\[
+\text{Distance} = \frac{f_x \times \text{Marker Real Size}}{\text{Marker Pixel Width}}
+\]
+
+where:
+- \( f_x \) = focal length in pixels
+- Marker Real Size = known physical size of the marker
+- Marker Pixel Width = width of the detected marker in pixels
+
+---
 
 
 ## 🛠️ Nodes Developed
