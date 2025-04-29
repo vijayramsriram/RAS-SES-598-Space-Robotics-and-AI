@@ -44,6 +44,7 @@ In this project, I developed **two ROS 2 nodes** to achieve an autonomous drone 
 - Computes pixel errors between marker center and image center.
 - Publishes velocity corrections (`/cmd_vel`) to align the drone over the marker.
 - Initiates autonomous **LAND** command once centered above the ArUco within a threshold.
+![image](https://github.com/user-attachments/assets/f9866ac7-b4ae-41d3-809d-376478380aa2)
 
 ---
 
