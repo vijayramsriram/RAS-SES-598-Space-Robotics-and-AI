@@ -42,8 +42,6 @@ to estimate **marker distance** and **approximate cylinder dimensions**.
 
 ---
 
-## 🛠️ How It Works
-
 | Step | Description |
 |:-----|:------------|
 | 1 | Subscribe to camera images `/rgb_camera` |
@@ -75,6 +73,9 @@ where:
 - \( f_x \) = focal length in pixels
 - Marker Real Size = known physical size of the marker
 - Marker Pixel Width = width of the detected marker in pixels
+
+## Output
+![image](https://github.com/user-attachments/assets/64792be6-cef8-49f2-86e2-868df13e5567)
 
 ---
 
