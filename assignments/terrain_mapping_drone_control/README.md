@@ -195,6 +195,8 @@ This will:
 
 ## 🛠️ NOTE
 run the aruco_landing node after the drone sees the aruco marker.
+
+
 4. **Run the aruco_landing Node:**
 
 ```bash
@@ -213,6 +215,7 @@ ros2 run terrain_mapping_drone_control dimension_estimator.py
 
 ## 🛠️ NOTE
 run the energy logger node after the drone arms and lifts a little.
+
 6. **Run the energy_logger Node:**
 
 ```bash
