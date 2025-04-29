@@ -42,7 +42,7 @@ In this project, I developed **two ROS 2 nodes** to achieve an autonomous drone 
 ## 🧠 Workflow to Launch the System
 
 1. **Start Gazebo simulation:**
-
+```bash
 ros2 launch terrain_mapping_drone_control cylinder_landing.launch.py
 
 This will:
