@@ -211,7 +211,7 @@ ros2 run terrain_mapping_drone_control dimension_estimator.py
 6. **Run the energy_logger Node:**
 
 ```bash
-ros2 run terrain_mapping_drone_control aruco_landing.py
+ros2 run terrain_mapping_drone_control energy_logger.py
 ```
 
 
