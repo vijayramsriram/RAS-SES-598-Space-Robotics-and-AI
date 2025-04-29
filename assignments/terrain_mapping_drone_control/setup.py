@@ -35,6 +35,8 @@ setup(
             'terrain_mapping_drone_control/aruco_tracker.py',
             'terrain_mapping_drone_control/aruco_landing.py',
             'terrain_mapping_drone_control/takeoff_and_hover.py',
+            'terrain_mapping_drone_control/dimension_estimator.py',
+            'terrain_mapping_drone_control/energy_logger.py',
             'terrain_mapping_drone_control/spiral_trajectory.py'
         ]),
         ('share/' + package_name + '/models/cylinder_short',
@@ -63,6 +65,8 @@ setup(
             'aruco_landing = terrain_mapping_drone_control.aruco_landing:main',
             'aruco_landing_controller = terrain_mapping_drone_control.aruco_landing_controller:main',
             'takeoff_and_hover = terrain_mapping_drone_control.takeoff_and_hover:main',
+            'dimension_estimator = terrain_mapping_drone_control.dimension_estimator:main',
+            'energy_logger = terrain_mapping_drone_control.energy_logger:main',
         ],
     },
     python_requires='>=3.8'
