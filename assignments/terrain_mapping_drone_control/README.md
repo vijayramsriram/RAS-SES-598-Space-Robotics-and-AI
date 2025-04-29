@@ -27,7 +27,7 @@ In this project, I developed **four ROS 2 nodes** to achieve a fully autonomous 
 ![image](https://github.com/user-attachments/assets/5db78375-8d41-4a06-97c1-fc9f4ef10dc0)
 
 
-# 📏 Dimension Estimator Node (`dimension_estimator.py`)
+#  Dimension Estimator Node (`dimension_estimator.py`)
 
 ---
 The `dimension_estimator.py` node is designed to estimate the distance between the drone and the ArUco marker in the scene.
@@ -40,7 +40,7 @@ It uses:
 
 to estimate **marker distance** and **approximate cylinder dimensions**.
 
-✅ Real-time distance calculation from marker pixel size.
+- Real-time distance calculation from marker pixel size.
 
 ---
 
@@ -54,7 +54,7 @@ to estimate **marker distance** and **approximate cylinder dimensions**.
 
 ---
 
-## 📐 Important Parameters
+##  Important Parameters
 
 | Parameter | Value | Description |
 |:----------|:------|:------------|
@@ -89,8 +89,7 @@ where:
 
 The `energy_logger.py` node monitors the drone’s motion by subscribing to its odometry data.  
 It continuously tracks the total distance traveled and estimates the energy consumed during flight.
-  
-✅ Real-time  
+ 
 
 ---
 | Step | Description |
@@ -149,7 +148,7 @@ It continuously tracks the total distance traveled and estimates the energy cons
 
 ---
 
-## 🧠 Workflow to Launch the System
+##  Workflow to Launch the System
 
 1. **Start Gazebo simulation:**
 ```bash
@@ -178,7 +177,7 @@ This will:
 -Hover stably at the target altitude
 
 
-## 🛠️ NOTE
+##  NOTE
 run the aruco_landing node after the drone sees the aruco marker.
 
 
@@ -198,7 +197,7 @@ This will:
 ros2 run terrain_mapping_drone_control dimension_estimator.py
 ```
 
-## 🛠️ NOTE
+## NOTE
 run the energy logger node after the drone arms and lifts a little.
 
 6. **Run the energy_logger Node:**
