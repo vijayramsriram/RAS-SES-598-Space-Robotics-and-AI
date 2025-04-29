@@ -50,7 +50,7 @@ This will:
 -Start Gazebo simulation
 -Load arena environment
 -Spawn cylinder object with attached ArUco marker
-
+```
 2. **Start the Micro XRCE Agent for PX4:**
 
 
