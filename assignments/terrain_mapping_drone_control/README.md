@@ -75,7 +75,7 @@ This will:
 -Start detecting ArUco markers using onboard camera
 -Align the drone over the marker using velocity control
 -Command the drone to LAND once centered over the marker
-
+```
 🏁 Final Result
 
 
