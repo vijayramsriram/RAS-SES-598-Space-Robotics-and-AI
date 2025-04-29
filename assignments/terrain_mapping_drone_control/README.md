@@ -89,8 +89,7 @@ where:
 
 The `energy_logger.py` node monitors the drone’s motion by subscribing to its odometry data.  
 It continuously tracks the total distance traveled and estimates the energy consumed during flight.
-
-✅ Lightweight  
+  
 ✅ Real-time  
 
 ---
@@ -193,7 +192,10 @@ This will:
 -Smoothly takeoff to 15 meters
 -Hover stably at the target altitude
 
-4. **Run the energy_logger Node:**
+
+## 🛠️ NOTE
+run the aruco_landing node after the drone sees the aruco marker.
+4. **Run the aruco_landing Node:**
 
 ```bash
 ros2 run terrain_mapping_drone_control aruco_landing.py
@@ -208,12 +210,16 @@ This will:
 ```bash
 ros2 run terrain_mapping_drone_control dimension_estimator.py
 ```
+
+## 🛠️ NOTE
+run the energy logger node after the drone arms and lifts a little.
 6. **Run the energy_logger Node:**
 
 ```bash
 ros2 run terrain_mapping_drone_control energy_logger.py
 ```
 
+ 
 
 🏁 **Final Result**
 ![image](https://github.com/user-attachments/assets/baf82ba8-ec47-4e64-b993-63ecf235087a)
