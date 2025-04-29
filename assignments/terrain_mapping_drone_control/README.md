@@ -1,4 +1,4 @@
-# Autonomous Drone Takeoff and ArUco Landing
+# Assignment 3: Rocky Times Challenge - Search, Map, & Analyze report
 
 This ROS 2 package implements a basic autonomous drone mission using PX4 SITL and Gazebo.  
 It performs:
