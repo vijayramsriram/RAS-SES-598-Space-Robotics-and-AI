@@ -102,21 +102,6 @@ It continuously tracks the total distance traveled and estimates the energy cons
 | 5 | Logs estimated **energy usage**, assuming 1 unit per meter |
 
 ---
-## 🔧 QoS Configuration
-
-To receive PX4 odometry correctly, this node uses:
-
-- **Best Effort** QoS (matching PX4’s publisher)
-- Depth = 10
-
-python
-from rclpy.qos import QoSProfile, QoSReliabilityPolicy
-
-qos_profile = QoSProfile(
-    reliability=QoSReliabilityPolicy.BEST_EFFORT,
-    depth=10
-)
-Avoids QoS mismatch warnings and ensures message reception.
 
 ![image](https://github.com/user-attachments/assets/954350cd-a707-4dbb-852f-e1ab16b4d66f)
 
