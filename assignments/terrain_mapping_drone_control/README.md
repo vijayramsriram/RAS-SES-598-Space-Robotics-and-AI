@@ -19,6 +19,14 @@ In this project, I developed **two ROS 2 nodes** to achieve an autonomous drone 
 
 ---
 
+## 🛠️ NOTE
+ I have changed the px4 x500_depth cameras orientation to face down for my code to work.
+
+<pose>.12 .03 .242 0 1.5708 0</pose>
+ ![image](https://github.com/user-attachments/assets/8f5a08ff-f789-4a52-8937-16735a95125b)
+
+
+
 ## 🛠️ Nodes Developed
 
 ### 1. `takeoff_and_hover.py`
