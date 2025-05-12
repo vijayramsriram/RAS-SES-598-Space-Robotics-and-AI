@@ -1,0 +1,50 @@
+[1.013s] Invoking command in '/home/vijay/ros2_project/src/ros2_project/ros2_project': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=(yolo) \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ PYTHONPATH=/home/vijay/ros2_project/build/ros2_project/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vijay/ros2_project/install/ros2_project/lib/python3.12/site-packages:/home/vijay/ros2_project/install/px4_msgs/lib/python3.12/site-packages:/home/vijay/ros2_project/install/ros2_project/lib/python3.12/site-packages:/opt/ros/jazzy/lib/python3.12/site-packages:/home/vijay/yolo/lib/python3.12/site-packages VIRTUAL_ENV_PROMPT=(yolo) /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/ros2_project build --build-base /home/vijay/ros2_project/build/ros2_project/build install --record /home/vijay/ros2_project/build/ros2_project/install.log --single-version-externally-managed install_data
+[1.235s] /home/vijay/yolo/lib/python3.12/site-packages/setuptools/_distutils/dist.py:289: UserWarning: Unknown distribution option: 'tests_require'
+[1.235s]   warnings.warn(msg)
+[1.391s] running egg_info
+[1.412s] writing ../../../build/ros2_project/ros2_project.egg-info/PKG-INFO
+[1.412s] writing dependency_links to ../../../build/ros2_project/ros2_project.egg-info/dependency_links.txt
+[1.412s] writing entry points to ../../../build/ros2_project/ros2_project.egg-info/entry_points.txt
+[1.412s] writing requirements to ../../../build/ros2_project/ros2_project.egg-info/requires.txt
+[1.412s] writing top-level names to ../../../build/ros2_project/ros2_project.egg-info/top_level.txt
+[1.458s] reading manifest file '../../../build/ros2_project/ros2_project.egg-info/SOURCES.txt'
+[1.458s] adding license file 'LICENSE'
+[1.459s] writing manifest file '../../../build/ros2_project/ros2_project.egg-info/SOURCES.txt'
+[1.459s] running build
+[1.459s] running build_py
+[1.459s] copying ros2_project/coordinates.py -> /home/vijay/ros2_project/build/ros2_project/build/lib/ros2_project
+[1.459s] copying ros2_project/processes.py -> /home/vijay/ros2_project/build/ros2_project/build/lib/ros2_project
+[1.459s] copying ros2_project/visualizer.py -> /home/vijay/ros2_project/build/ros2_project/build/lib/ros2_project
+[1.459s] copying ros2_project/yolo.py -> /home/vijay/ros2_project/build/ros2_project/build/lib/ros2_project
+[1.459s] copying ros2_project/image_viewer.py -> /home/vijay/ros2_project/build/ros2_project/build/lib/ros2_project
+[1.459s] copying ros2_project/control.py -> /home/vijay/ros2_project/build/ros2_project/build/lib/ros2_project
+[1.459s] copying ros2_project/camera_info_publisher.py -> /home/vijay/ros2_project/build/ros2_project/build/lib/ros2_project
+[1.459s] copying ros2_project/__init__.py -> /home/vijay/ros2_project/build/ros2_project/build/lib/ros2_project
+[1.460s] copying ros2_project/velocity_control.py -> /home/vijay/ros2_project/build/ros2_project/build/lib/ros2_project
+[1.460s] copying ros2_project/image_saver.py -> /home/vijay/ros2_project/build/ros2_project/build/lib/ros2_project
+[1.460s] running install
+[1.464s] running install_lib
+[1.489s] copying /home/vijay/ros2_project/build/ros2_project/build/lib/ros2_project/yolo.py -> /home/vijay/ros2_project/install/ros2_project/lib/python3.12/site-packages/ros2_project
+[1.491s] byte-compiling /home/vijay/ros2_project/install/ros2_project/lib/python3.12/site-packages/ros2_project/yolo.py to yolo.cpython-312.pyc
+[1.493s] running install_data
+[1.493s] copying resource/ros2_project -> /home/vijay/ros2_project/install/ros2_project/share/ament_index/resource_index/packages
+[1.493s] copying resource/visualize.rviz -> /home/vijay/ros2_project/install/ros2_project/share/ament_index/resource_index/packages
+[1.493s] copying package.xml -> /home/vijay/ros2_project/install/ros2_project/share/ros2_project
+[1.494s] copying launch/drone.launch.py -> /home/vijay/ros2_project/install/ros2_project/share/ros2_project
+[1.494s] copying launch/arena.launch.py -> /home/vijay/ros2_project/install/ros2_project/share/ros2_project
+[1.494s] copying resource/visualize.rviz -> /home/vijay/ros2_project/install/ros2_project/share/ros2_project
+[1.494s] running install_egg_info
+[1.523s] removing '/home/vijay/ros2_project/install/ros2_project/lib/python3.12/site-packages/ros2_project-0.0.0-py3.12.egg-info' (and everything under it)
+[1.523s] Copying ../../../build/ros2_project/ros2_project.egg-info to /home/vijay/ros2_project/install/ros2_project/lib/python3.12/site-packages/ros2_project-0.0.0-py3.12.egg-info
+[1.524s] running install_scripts
+[1.650s] Installing camera_info_publisher script to /home/vijay/ros2_project/install/ros2_project/lib/ros2_project
+[1.650s] Installing control script to /home/vijay/ros2_project/install/ros2_project/lib/ros2_project
+[1.650s] Installing coordinates script to /home/vijay/ros2_project/install/ros2_project/lib/ros2_project
+[1.650s] Installing image_saver script to /home/vijay/ros2_project/install/ros2_project/lib/ros2_project
+[1.650s] Installing offboard_control script to /home/vijay/ros2_project/install/ros2_project/lib/ros2_project
+[1.650s] Installing processes script to /home/vijay/ros2_project/install/ros2_project/lib/ros2_project
+[1.650s] Installing velocity_control script to /home/vijay/ros2_project/install/ros2_project/lib/ros2_project
+[1.650s] Installing visualizer script to /home/vijay/ros2_project/install/ros2_project/lib/ros2_project
+[1.650s] Installing yolo script to /home/vijay/ros2_project/install/ros2_project/lib/ros2_project
+[1.650s] writing list of installed files to '/home/vijay/ros2_project/build/ros2_project/install.log'
+[1.724s] Invoked command in '/home/vijay/ros2_project/src/ros2_project/ros2_project' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=(yolo) \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ PYTHONPATH=/home/vijay/ros2_project/build/ros2_project/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/vijay/ros2_project/install/ros2_project/lib/python3.12/site-packages:/home/vijay/ros2_project/install/px4_msgs/lib/python3.12/site-packages:/home/vijay/ros2_project/install/ros2_project/lib/python3.12/site-packages:/opt/ros/jazzy/lib/python3.12/site-packages:/home/vijay/yolo/lib/python3.12/site-packages VIRTUAL_ENV_PROMPT=(yolo) /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/ros2_project build --build-base /home/vijay/ros2_project/build/ros2_project/build install --record /home/vijay/ros2_project/build/ros2_project/install.log --single-version-externally-managed install_data
